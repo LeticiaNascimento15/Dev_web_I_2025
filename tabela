@@ -1,0 +1,52 @@
+Tabela.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="POST">
+        <label for="li">Linha</label> <input type="text" name="linha">
+        <label for="col">Linha</label> <input type="text" name="coluna">
+        <button type="sumit">enviar</button>
+    </form>
+    </body>
+</html>
+
+
+Tabela.php
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <?php
+    $linha=$POST["linha"];
+    $coluna=$POST["coluna"];
+        echo "<table>";
+            for($i=1; $i<=$linha; $i++){
+                echo"<tr>";
+            for($j=1; $j<=$coluna; $j++){
+                if($i==1){
+                    echo"<tr>C" . $j . "</th>";
+                }
+            else echo "<td"> C" . 4j . "L" . $i . "</td>";
+            }
+            echo"</tr>";
+            }
+        echo"</table>";
+        $_SESSION["linha"]=$linha;
+        $_SESSION["coluna"]=$coluna;
+        var_dump($_SESSION);
+
+   ?>
+</body>
+</html>
