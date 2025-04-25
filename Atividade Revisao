@@ -1,0 +1,34 @@
+Atividade revisao
+cadastrar
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<form action="" method="POST">
+        <label>Coluna</label> <input type="text" name="Nome">
+    <select name="Categoria">
+        <option value="Limpeza">Limpeza</option>
+        <option value="Cereais">Cereais</option>
+        <option value="Armarinho">Armarinho</option>    
+    </select>
+    <label>=Fabricante</label> <input type="text" name="Fabricante">
+    <button type="submit">Cadastrar</button>
+</form>
+<?php
+session_start();
+$Nome=$_POST["Nome"];
+$Categoria=$_POST["Categoria"];
+$Fabricante=$_POST["Fabricante"];
+
+if(!isset($SESSION) && !isset($SESSION["Produtos"])){
+
+}
+array_push($_SESSION["Produtos"],["Nome=>$nome","Categoria=>$Categoria","Fabricante=>$fabricante"])
+?>
+</body>
+</html>
