@@ -1,0 +1,30 @@
+arrays
+<?php
+$alunos=array("edson", "shirley", "maite");
+//var_dump($alunos);
+
+//$bebidas[
+   //"sucos" => ["acerola","morango"];
+    //"refrigerante" => ["cocaCola", "peps" ];
+    //"cafe" => ["cappuccino", "expresso"];
+//]
+
+//echo $alunos[0];
+//echo $bebidas["refrigerante"][1];
+
+
+//ADICIONAR um  valor no final do array array_push
+array_push($alunos,"Karina", "Nanci");
+print_r ($alunos);
+
+echo"Inicio do codigo";
+//ADICIONAR um  valor no inicio do array array_unshift
+array_unshift($alunos, "Maria", "Larissa");
+print_r($alunos);
+
+echo "apagar o final";
+//APAGAR DO FINAL usamos array_pop
+array_pop($alunos);
+print_r($alunos);
+
+?>
