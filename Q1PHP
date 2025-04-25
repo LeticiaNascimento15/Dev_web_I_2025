@@ -1,0 +1,56 @@
+Q1.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<form action="Q1.php" method=“get”>
+<label>Nota 1</label><input type=“text” name=“A”>
+
+<label>Nota 2</label><input type=“text” name=“B”>
+
+<label>Nota 3</label><input type=“text” name=“C”>
+
+<label>Nota 4</label><input type=“text” name=“D”>
+
+<button type="submit">Enviar</button>
+
+</form>
+</body>
+
+Q1.php
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+<?php
+$A=$_GET["A"];
+
+$B=$_GET[“B”];
+
+$C=$_GET[“C”];
+
+$D=$_GET[“D”];
+
+$M=($A+$B+$C+$D)/4;
+
+If($M>=5){
+echo “Aprovado”;
+}
+
+else echo “Reprovado”;
+
+?>
+
+</body>
+</html>
