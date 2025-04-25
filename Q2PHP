@@ -1,0 +1,73 @@
+Q2.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="soma2.php" method="get">
+  A <input type="text" name="A" value="3" />
+<br/>
+  B <input type="text" name="B" value="4" />
+
+<button type="submit"> Soma
+  </button>
+
+<select name="op">
+
+<option value="">
+  </option>
+
+<option value="Adiçao">+
+  </option>
+
+<option value="Subtraçao">-
+  </option>
+
+<option value="Multiplicaçao">*
+  </option>
+
+<option value="Divisao">/
+  </option>
+
+    </select>
+  </form>
+</body>
+</html>
+
+
+Q2.php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <?php
+        $A=$_GET["A"];
+        $B=$_GET["B"];
+        $op=$_GET["op"];
+            if($A==""|| $B==""){
+            die("Dados invalidos");
+        }
+            if($op== "Adiçao") {
+                echo $A+$B;
+        }
+            if($op=="Subtraçao") {
+                echo $A-$B;
+        }
+            if($op=="Multiplicaçao"){
+                echo $A*$B;
+        }
+        if($op=="Divisao"){
+                echo $A/$B;
+        }
+    
+    
+    ?>
+</body>
+</html>
