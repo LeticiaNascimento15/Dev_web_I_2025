@@ -1,0 +1,35 @@
+<?php
+// Dados genéricos de exemplo (pode vir de $_SESSION, $_POST, banco etc.)
+$dados = [
+    ["campo1" => "Item A", "campo2" => 30],
+    ["campo1" => "Item B", "campo2" => 150],
+    ["campo1" => "Item C", "campo2" => 250],
+];
+
+ARRAY MAP adicionar nova coluna "categoria"
+
+$dadosComCategoria = array_map(function ($item) {
+    $valor = floatval($item["campo2"]);
+    $item["categoria"] = match (true) {
+        $valor < 50 => "Baixo",
+        $valor <= 200 => "Médio",
+        default => "Alto"
+    };
+    return $item;
+}, $dados);
+
+ARRAY FILTER remover os itens com categoria "Baixo"
+
+$dadosFiltrados = array_filter($dadosComCategoria, fn($item) => $item["categoria"] !== "Baixo");
+
+// Exibir resultado
+echo "<table border='1'><tr><th>Campo 1</th><th>Campo 2</th><th>Categoria</th></tr>";
+foreach ($dadosFiltrados as $item) {
+    echo "<tr>
+        <td>{$item["campo1"]}</td>
+        <td>{$item["campo2"]}</td>
+        <td>{$item["categoria"]}</td>
+    </tr>";
+}
+echo "</table>";
+?>
