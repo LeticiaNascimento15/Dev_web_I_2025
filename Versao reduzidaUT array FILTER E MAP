@@ -1,0 +1,51 @@
+CADASTRO
+<?php
+session_start();
+if (!isset($_SESSION["usuario"])) header("Location: login.php");
+
+if ($_POST) {
+    $email = $_SESSION["usuario"]["email"];
+    $p = [
+        "nome" => $_POST["nome"],
+        "idade" => $_POST["idade"],
+        "gravidade" => $_POST["gravidade"]
+    ];
+    $_SESSION["pacientes"][$email][] = $p;
+}
+?>
+
+<form method="post">
+    Nome: <input name="nome"><br>
+    Idade: <input name="idade" type="number"><br>
+    Gravidade: <select name="gravidade">
+        <option>Leve</option><option>Grave</option>
+    </select><br>
+    <button type="submit">Salvar</button>
+</form>
+<a href="listagem.php">Ver Lista</a>
+
+
+
+LISTAGEM
+
+
+<?php
+session_start();
+if (!isset($_SESSION["usuario"])) header("Location: login.php");
+
+$email = $_SESSION["usuario"]["email"];
+$lista = $_SESSION["pacientes"][$email] ?? [];
+
+$map = array_map(function($p) {
+    $p["risco"] = $p["gravidade"] == "Grave" ? "Alto" : "Baixo";
+    return $p;
+}, $lista);
+
+$filtro = array_filter($map, fn($p) => $p["risco"] == "Alto");
+?>
+
+<ul>
+<?php foreach ($filtro as $p): ?>
+    <li><?= $p["nome"] ?> (<?= $p["idade"] ?> anos) - <?= $p["risco"] ?></li>
+<?php endforeach; ?>
+</ul>
