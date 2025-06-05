@@ -1,0 +1,194 @@
+MINIS EXERCICIOS
+1)📋 Exercício 1 – Cadastro de Livros com array_map criando coluna "Categoria Etária"
+Descrição: Cadastre livros com nome e número de páginas. Use array_map para adicionar uma coluna "categoria":
+
+Se páginas < 100: "Curto"
+100–300: "Médio"
+300: "Longo"
+
+<?php
+Copiar
+Editar
+<?php
+$livros = [
+    ["nome" => "Dom Casmurro", "paginas" => 220],
+    ["nome" => "A Hora da Estrela", "paginas" => 87],
+    ["nome" => "O Senhor dos Anéis", "paginas" => 480],
+];
+
+$comCategoria = array_map(function($l) {
+    $l["categoria"] = match (true) {
+        $l["paginas"] < 100 => "Curto",
+        $l["paginas"] <= 300 => "Médio",
+        default => "Longo"
+    };
+    return $l;
+}, $livros);
+?>
+
+<table border="1">
+    <tr><th>Nome</th><th>Páginas</th><th>Categoria</th></tr>
+    <?php foreach ($comCategoria as $livro): ?>
+        <tr>
+            <td><?= $livro["nome"] ?></td>
+            <td><?= $livro["paginas"] ?></td>
+            <td><?= $livro["categoria"] ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+2)🧪 Exercício 2 – Filtro de Temperaturas com array_filter
+Descrição: Dado um array de temperaturas, filtre apenas as maiores que 30°C.
+
+php
+Copiar
+Editar
+<?php
+$temperaturas = [25, 28, 33, 40, 22, 31];
+
+$quentes = array_filter($temperaturas, fn($t) => $t > 30);
+
+foreach ($quentes as $t) {
+    echo "$t ºC está quente<br>";
+}
+?>
+
+3)🏫 Exercício 3 – Cadastro de Alunos e array_map para calcular média
+Descrição: Alunos com duas notas. Calcular e mostrar a média usando array_map.
+
+php
+Copiar
+Editar
+<?php
+$alunos = [
+    ["nome" => "Carlos", "n1" => 6, "n2" => 8],
+    ["nome" => "Lara", "n1" => 9, "n2" => 7],
+];
+
+$comMedia = array_map(function($a) {
+    $a["media"] = ($a["n1"] + $a["n2"]) / 2;
+    return $a;
+}, $alunos);
+
+foreach ($comMedia as $a) {
+    echo "{$a["nome"]} - Média: {$a["media"]}<br>";
+}
+?>
+
+4)🩺 Exercício 4 – Mini Prova: Cadastro de Pacientes (simples)
+Descrição: Cadastro de pacientes com gravidade e idade. Calcular risco com array_map. Mostrar só os de risco alto com array_filter.
+
+php
+Copiar
+Editar
+
+<?php
+$pacientes = [
+    ["nome" => "José", "gravidade" => "Grave", "idade" => 50],
+    ["nome" => "Paula", "gravidade" => "Leve", "idade" => 30],
+    ["nome" => "Ana", "gravidade" => "Crítico", "idade" => 70],
+];
+
+function risco($g, $i) {
+    return match ($g) {
+        "Leve" => "Baixo",
+        "Grave" => "Alto",
+        "Crítico" => $i >= 60 ? "Extremo" : "Muito Alto",
+        default => "Indefinido"
+    };
+}
+
+$comRisco = array_map(function($p) {
+    $p["risco"] = risco($p["gravidade"], $p["idade"]);
+    return $p;
+}, $pacientes);
+
+$altos = array_filter($comRisco, fn($p) => in_array($p["risco"], ["Alto", "Muito Alto", "Extremo"]));
+
+foreach ($altos as $p) {
+    echo "{$p["nome"]} - Risco: {$p["risco"]}<br>";
+}
+?>
+5)👨‍🍳 Exercício 5 – Filtrar pratos vegetarianos com array_filter
+Descrição: Recebe pratos com tipo (Vegetariano / Carne). Mostre só os vegetarianos.
+
+<?php
+Copiar
+Editar
+<?php
+$cardapio = [
+    ["nome" => "Salada", "tipo" => "Vegetariano"],
+    ["nome" => "Feijoada", "tipo" => "Carne"],
+    ["nome" => "Lasanha de berinjela", "tipo" => "Vegetariano"],
+];
+
+$vegetarianos = array_filter($cardapio, fn($p) => $p["tipo"] == "Vegetariano");
+
+foreach ($vegetarianos as $p) {
+    echo "Prato: {$p["nome"]}<br>";
+}
+?>
+
+6)📝 Exercício: Cadastro de Produtos e Classificação por Preço
+📌 Regras:
+O usuário cadastra produtos com nome e preço.
+Os dados ficam salvos na $_SESSION.
+A listagem usa array_map para:
+Adicionar uma coluna categoria:
+Preço < 50: "Barato"
+50–200: "Médio"
+200: "Caro"
+A listagem usa array_filter para mostrar apenas os produtos "Médio" e "Caro".
+
+💾 produto.php (tudo em uma só página para simplicidade)
+php
+Copiar
+Editar
+<?php
+session_start();
+
+if (!isset($_SESSION["produtos"])) {
+    $_SESSION["produtos"] = [];
+}
+
+// Quando o formulário é enviado
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $novo = [
+        "nome" => $_POST["nome"],
+        "preco" => floatval($_POST["preco"])
+    ];
+    $_SESSION["produtos"][] = $novo;
+}
+
+// Adiciona a coluna 'categoria' com array_map
+$produtosComCategoria = array_map(function ($p) {
+    $p["categoria"] = match (true) {
+        $p["preco"] < 50 => "Barato",
+        $p["preco"] <= 200 => "Médio",
+        default => "Caro"
+    };
+    return $p;
+}, $_SESSION["produtos"]);
+
+// Filtra produtos que não são "Barato"
+$filtrados = array_filter($produtosComCategoria, fn($p) => $p["categoria"] !== "Barato");
+?>
+
+<h2>Cadastro de Produtos</h2>
+<form method="post">
+    Nome: <input name="nome" required><br>
+    Preço: <input name="preco" type="number" step="0.01" required><br>
+    <button type="submit">Cadastrar</button>
+</form>
+
+<h2>Produtos (Médio e Caro)</h2>
+<table border="1">
+    <tr><th>Nome</th><th>Preço</th><th>Categoria</th></tr>
+    <?php foreach ($filtrados as $p): ?>
+        <tr>
+            <td><?= htmlspecialchars($p["nome"]) ?></td>
+            <td>R$ <?= number_format($p["preco"], 2, ',', '.') ?></td>
+            <td><?= $p["categoria"] ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
