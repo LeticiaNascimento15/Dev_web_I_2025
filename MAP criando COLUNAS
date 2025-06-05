@@ -1,0 +1,119 @@
+LOGUIN
+<?php
+session_start();
+
+$usuarios = [
+    ["email" => "ana@hospital.com", "senha" => "123", "nome" => "Ana", "perfil" => "recepcionista"],
+    ["email" => "luiz@hospital.com", "senha" => "456", "nome" => "Luiz", "perfil" => "médico"],
+];
+
+if ($_POST) {
+    foreach ($usuarios as $user) {
+        if ($_POST["email"] === $user["email"] && $_POST["senha"] === $user["senha"]) {
+            $_SESSION["usuario"] = [
+                "email" => $user["email"],
+                "nome" => $user["nome"],
+                "perfil" => $user["perfil"],
+            ];
+            header("Location: cadastro.php");
+            exit;
+        }
+    }
+    echo "Login inválido";
+}
+?>
+
+<form method="post">
+    Email: <input name="email"><br>
+    Senha: <input name="senha" type="password"><br>
+    <button type="submit">Entrar</button>
+</form>
+
+
+CADASTRO
+<?php
+session_start();
+if (!isset($_SESSION["usuario"])) header("Location: login.php");
+
+if ($_POST) {
+    $email = $_SESSION["usuario"]["email"];
+    $paciente = [
+        "nome" => $_POST["nome"],
+        "idade" => $_POST["idade"],
+        "gravidade" => $_POST["gravidade"]
+    ];
+    $_SESSION["pacientes"][$email][] = $paciente;
+}
+?>
+
+<p>Usuário logado: <?= $_SESSION["usuario"]["email"] ?></p>
+
+<form method="post">
+    Nome: <input name="nome"><br>
+    Idade: <input name="idade" type="number"><br>
+    Gravidade:
+    <select name="gravidade">
+        <option>Leve</option>
+        <option>Moderado</option>
+        <option>Grave</option>
+        <option>Crítico</option>
+    </select><br>
+    <button type="submit">Salvar</button>
+</form>
+
+<a href="listagem.php">Ver Pacientes</a>
+LISTAGEM
+
+<?php
+session_start();
+if (!isset($_SESSION["usuario"])) header("Location: login.php");
+
+$email = $_SESSION["usuario"]["email"];
+$pacientes = $_SESSION["pacientes"][$email] ?? [];
+
+// Função para calcular o risco
+function calcularRisco($gravidade, $idade) {
+    return match ($gravidade) {
+        "Leve" => "Baixo",
+        "Moderado" => "Médio",
+        "Grave" => "Alto",
+        "Crítico" => $idade >= 60 ? "Extremo" : "Muito Alto",
+        default => "Desconhecido"
+    };
+}
+
+// Usamos array_map para adicionar 'risco' e 'observação' aos pacientes
+$complementados = array_map(function($p) {
+    $p["risco"] = calcularRisco($p["gravidade"], $p["idade"]);
+    $p["obs"] = $p["idade"] >= 65 ? "Idoso" : "Adulto";
+    return $p;
+}, $pacientes);
+
+// Filtra pacientes com risco diferente de Baixo
+$filtrados = array_filter($complementados, fn($p) => $p["risco"] !== "Baixo");
+?>
+
+<p>Usuário logado: <?= $_SESSION["usuario"]["email"] ?></p>
+
+<table border="1">
+    <tr>
+        <th>Nome</th>
+        <th>Idade</th>
+        <th>Gravidade</th>
+        <th>Risco</th>
+        <th>Obs</th>
+    </tr>
+    <?php foreach ($filtrados as $p): ?>
+        <tr>
+            <td><?= $p["nome"] ?></td>
+            <td><?= $p["idade"] ?></td>
+            <td><?= $p["gravidade"] ?></td>
+            <td><?= $p["risco"] ?></td>
+            <td><?= $p["obs"] ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+<a href="cadastro.php">Novo Paciente</a>
+
+OBS=>coluna nova baseada na idade (ex: mostra “Idoso” se ≥ 65 anos).
