@@ -1,0 +1,111 @@
+ESTRUTURA DO CÓDIGO BASE
+LOGUIN
+<?php
+session_start();
+
+$usuarios = [
+    ["email" => "teste@site.com", "senha" => "123", "nome" => "Teste", "perfil" => "admin"],
+];
+
+if ($_POST) {
+    foreach ($usuarios as $user) {
+        if ($_POST["email"] === $user["email"] && $_POST["senha"] === $user["senha"]) {
+            $_SESSION["usuario"] = [
+                "email" => $user["email"],
+                "nome" => $user["nome"],
+                "perfil" => $user["perfil"],
+            ];
+            header("Location: cadastro.php");
+            exit;
+        }
+    }
+    echo "Login inválido";
+}
+?>
+
+<form method="post">
+    Email: <input name="email"><br>
+    Senha: <input name="senha" type="password"><br>
+    <button type="submit">Entrar</button>
+</form>
+
+CADASTRO
+(Para cadastrar qualquer tipo de dado – aqui exemplo genérico com nome e valor)
+
+<?php
+session_start();
+if (!isset($_SESSION["usuario"])) header("Location: login.php");
+
+if ($_POST) {
+    $item = [
+        "nome" => $_POST["nome"],
+        "valor" => floatval($_POST["valor"])
+    ];
+
+    $email = $_SESSION["usuario"]["email"];
+    $_SESSION["itens"][$email][] = $item;
+}
+?>
+
+<h2>Cadastro de Itens</h2>
+<p>Usuário logado: <?= $_SESSION["usuario"]["email"] ?></p>
+
+<form method="post">
+    Nome do item: <input name="nome"><br>
+    Valor numérico: <input name="valor" type="number" step="0.01"><br>
+    <button type="submit">Salvar</button>
+</form>
+
+<a href="listagem.php">Ver Itens</a>
+
+
+LISTAGEM
+
+
+
+<?php
+session_start();
+if (!isset($_SESSION["usuario"])) header("Location: login.php");
+
+$email = $_SESSION["usuario"]["email"];
+$dados = $_SESSION["itens"][$email] ?? [];
+
+// array_map: adiciona nova coluna "categoria"
+$processados = array_map(function($d) {
+    $d["categoria"] = match (true) {
+        $d["valor"] < 50 => "Baixo",
+        $d["valor"] <= 200 => "Médio",
+        default => "Alto"
+    };
+    return $d;
+}, $dados);
+
+// array_filter: mantém só registros de categoria Média ou Alta
+$filtrados = array_filter($processados, fn($d) => $d["categoria"] !== "Baixo");
+?>
+
+<h2>Lista de Itens</h2>
+<p>Usuário logado: <?= $_SESSION["usuario"]["email"] ?></p>
+
+<table border="1">
+    <tr><th>Nome</th><th>Valor</th><th>Categoria</th></tr>
+    <?php foreach ($filtrados as $d): ?>
+        <tr>
+            <td><?= htmlspecialchars($d["nome"]) ?></td>
+            <td><?= number_format($d["valor"], 2, ',', '.') ?></td>
+            <td><?= $d["categoria"] ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+<a href="cadastro.php">Novo Cadastro</a>
+
+
+✅ Como adaptar:
+Você pode adaptar esse código base para qualquer tema, por exemplo:
+
+Contexto	Campo extra	Cálculo no array_map	Filtro no array_filter
+Alunos	nota	status: Aprovado / Reprovado	Apenas alunos com nota ≥ 6
+Produtos	preço	categoria: Barato / Caro	Apenas produtos acima de R$50
+Pacientes	idade	risco: Alto / Baixo	Apenas pacientes de risco Alto ou Crítico
+Funcionários	salário	faixa: Baixa / Média / Alta	Apenas média e alta
