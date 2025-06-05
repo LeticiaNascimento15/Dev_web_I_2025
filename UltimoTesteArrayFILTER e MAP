@@ -1,0 +1,115 @@
+LOGUIN
+<?php
+session_start();
+
+$usuarios = [
+    ["email" => "joao@hospital.com", "senha" => "123", "nome" => "João", "perfil" => "recepcionista"],
+    ["email" => "maria@hospital.com", "senha" => "456", "nome" => "Maria", "perfil" => "médico"],
+];
+
+if ($_POST) {
+    foreach ($usuarios as $user) {
+        if ($_POST["email"] === $user["email"] && $_POST["senha"] === $user["senha"]) {
+            $_SESSION["usuario"] = [
+                "email" => $user["email"],
+                "nome" => $user["nome"],
+                "perfil" => $user["perfil"],
+            ];
+            header("Location: listagem.php");
+            exit;
+        }
+    }
+    echo "Login inválido";
+}
+?>
+
+<form method="post">
+    Email: <input name="email"><br>
+    Senha: <input name="senha" type="password"><br>
+    <button type="submit">Entrar</button>
+</form>
+
+
+CADASTRO
+
+
+<?php
+session_start();
+if (!isset($_SESSION["usuario"])) header("Location: login.php");
+
+if ($_POST) {
+    $email = $_SESSION["usuario"]["email"];
+    $paciente = [
+        "nome" => $_POST["nome"],
+        "genero" => $_POST["genero"],
+        "idade" => $_POST["idade"],
+        "sangue" => $_POST["sangue"],
+        "doenca" => $_POST["doenca"],
+        "gravidade" => $_POST["gravidade"],
+        "admissao" => $_POST["admissao"]
+    ];
+    $_SESSION["pacientes"][$email][] = $paciente;
+}
+?>
+
+<form method="post">
+    Nome: <input name="nome"><br>
+    Gênero: <select name="genero">
+        <option>Masculino</option><option>Feminino</option><option>Outro</option>
+    </select><br>
+    Idade: <input name="idade" type="number"><br>
+    Tipo Sanguíneo: <select name="sangue">
+        <option>A+</option><option>O-</option> <!-- etc -->
+    </select><br>
+    Doença: <input name="doenca"><br>
+    Gravidade: <select name="gravidade">
+        <option>Leve</option><option>Moderado</option><option>Grave</option><option>Crítico</option>
+    </select><br>
+    Data de Admissão: <input name="admissao" type="date"><br>
+    <button type="submit">Cadastrar</button>
+</form>
+
+<a href="listagem.php">Ver Pacientes</a>
+
+LISTAGEM
+
+<?php
+session_start();
+if (!isset($_SESSION["usuario"])) header("Location: login.php");
+
+$email = $_SESSION["usuario"]["email"];
+$pacientes = $_SESSION["pacientes"][$email] ?? [];
+
+function calcularRisco($p) {
+    $idade = $p["idade"];
+    $g = $p["gravidade"];
+    if ($g == "Leve") return "Baixo";
+    if ($g == "Moderado") return "Médio";
+    if ($g == "Grave") return "Alto";
+    if ($g == "Crítico") return $idade >= 60 ? "Extremo" : "Muito Alto";
+}
+
+$pacientesComRisco = array_map(function($p) {
+    $p["risco"] = calcularRisco($p);
+    return $p;
+}, $pacientes);
+
+$filtrados = array_filter($pacientesComRisco, function($p) {
+    return $p["risco"] != "Baixo"; // exemplo de filtro
+});
+?>
+
+<table border="1">
+    <tr><th>Nome</th><th>Idade</th><th>Doença</th><th>Gravidade</th><th>Risco</th></tr>
+    <?php foreach ($filtrados as $p): ?>
+        <tr>
+            <td><?= $p["nome"] ?></td>
+            <td><?= $p["idade"] ?></td>
+            <td><?= $p["doenca"] ?></td>
+            <td><?= $p["gravidade"] ?></td>
+            <td><?= $p["risco"] ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+<a href="cadastro.php">Novo Paciente</a>
