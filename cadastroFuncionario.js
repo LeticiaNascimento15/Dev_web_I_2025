@@ -1,18 +1,42 @@
 document.addEventListener("DOMContentLoaded", (ev) => {
   let formCad = document.getElementById("formCadastroFuncionario");
-  let Camposalario = document.getElementById("salario");
+  let campoSalario = document.getElementById("salario");
   formCad.addEventListener("submit", (ev2) => {
     ev2.preventDefault();
-    let Camponome = document.getElementById("nome");
-    let Campotelefone = document.getElementById("telefone");
-    validaFormulario(Camponome.value, Camposalario.value, Campotelefone.value);
+    let campoNome = document.getElementById("nome");
+    let campoTelefone = document.getElementById("telefone");
+    validaFormulario(campoNome.value, campoSalario.value, campoTelefone.value)
+      ? formCad.submit()
+      : null;
   });
-  Camposalario.addEventListener("keypress", (ev2) => {
-    if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 0, ","].find(ev2.key))
-      (Camposalario.value = Camposalario.value),
-        string.substring(0, Camposalario.value.length - 1);
+  campoSalario.addEventListener("keyup", (ev2) => {
+    validaSalario(campoSalario, ev2.key);
   });
 });
-let validaFormulario = (nome, salario, Campotelefone) => {
+let validaFormulario = (nome, salario, telefone) => {
   return true;
+};
+
+let validaSalario = (campoSalario, charDigitado) => {
+  if (
+    !["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ","].find((el) => {
+      return charDigitado == el;
+    })
+  ) {
+    //SE NAO FOR NUMERO OU VIRGULA, RETIRA O ÚLTIMO CARACTER DIGITADO
+    campoSalario.value = campoSalario.value.substring(
+      0,
+      campoSalario.value.length - 2
+    );
+  }
+  //SE A VÍRGULA JÁ FOI DIGITADA ANTES, TAMBÉM TIRA
+  if (
+    charDigitado == "," &&
+    campoSalario.value.indexOf(",") < campoSalario.value.length - 1
+  ) {
+    campoSalario.value = campoSalario.value.substring(
+      0,
+      campoSalario.value.length - 1
+    );
+  }
 };
