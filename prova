@@ -1,0 +1,329 @@
+<?php
+class Database {
+    private $host = "localhost";
+    private $db_name = "seu_banco_de_dados";
+    private $username = "seu_usuario";
+    private $password = "sua_senha";
+    public $conn;
+
+    public function getConnection() {
+        $this->conn = null;
+        try {
+            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
+            $this->conn->exec("set names utf8");
+        } catch(PDOException $exception) {
+            echo "Erro de conexão: " . $exception->getMessage();
+        }
+        return $this->conn;
+    }
+}
+?>
+
+<?php
+class Usuario {
+    private $conn;
+    private $table_name = "usuarios";
+
+    public $id;
+    public $nome;
+    public $email;
+    public $senha;
+    public $nivel_acesso;
+
+    public function __construct($db) {
+        $this->conn = $db;
+    }
+
+    // Método CREATE
+    public function create() {
+        $query = "INSERT INTO " . $this->table_name . " SET nome=:nome, email=:email, senha=:senha, nivel_acesso=:nivel_acesso";
+        $stmt = $this->conn->prepare($query);
+
+        // Limpar e validar dados
+        $this->nome = htmlspecialchars(strip_tags($this->nome));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->senha = password_hash($this->senha, PASSWORD_DEFAULT); // Criptografar a senha
+        $this->nivel_acesso = htmlspecialchars(strip_tags($this->nivel_acesso));
+
+        // Vincular valores
+        $stmt->bindParam(":nome", $this->nome);
+        $stmt->bindParam(":email", $this->email);
+        $stmt->bindParam(":senha", $this->senha);
+        $stmt->bindParam(":nivel_acesso", $this->nivel_acesso);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    // Método READ (Ler todos)
+    public function read() {
+        $query = "SELECT id, nome, email, nivel_acesso FROM " . $this->table_name . " ORDER BY nome ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    // Método READ (Ler um único registro)
+    public function readOne() {
+        $query = "SELECT id, nome, email, nivel_acesso FROM " . $this->table_name . " WHERE id = ? LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            $this->nome = $row['nome'];
+            $this->email = $row['email'];
+            $this->nivel_acesso = $row['nivel_acesso'];
+            return true;
+        }
+        return false;
+    }
+
+    // Método UPDATE
+    public function update() {
+        $query = "UPDATE " . $this->table_name . " SET nome=:nome, email=:email, nivel_acesso=:nivel_acesso WHERE id=:id";
+        $stmt = $this->conn->prepare($query);
+
+        // Limpar e validar dados
+        $this->id = htmlspecialchars(strip_tags($this->id));
+        $this->nome = htmlspecialchars(strip_tags($this->nome));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->nivel_acesso = htmlspecialchars(strip_tags($this->nivel_acesso));
+
+        // Vincular valores
+        $stmt->bindParam(":id", $this->id);
+        $stmt->bindParam(":nome", $this->nome);
+        $stmt->bindParam(":email", $this->email);
+        $stmt->bindParam(":nivel_acesso", $this->nivel_acesso);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    // Método DELETE
+    public function delete() {
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+
+        $this->id = htmlspecialchars(strip_tags($this->id));
+        $stmt->bindParam(1, $this->id);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+}
+?>
+
+<?php
+require_once '../config/Database.php';
+require_once '../models/Usuario.php';
+
+$database = new Database();
+$db = $database->getConnection();
+$usuario = new Usuario($db);
+
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+
+switch ($action) {
+    case 'create':
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $usuario->nome = $_POST['nome'];
+            $usuario->email = $_POST['email'];
+            $usuario->senha = $_POST['senha'];
+            $usuario->nivel_acesso = $_POST['nivel_acesso'];
+            if ($usuario->create()) {
+                header('Location: ../views/usuarios/index.php?status=success_create');
+            } else {
+                echo "Erro ao criar usuário.";
+            }
+        }
+        break;
+
+    case 'update':
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $usuario->id = $_POST['id'];
+            $usuario->nome = $_POST['nome'];
+            $usuario->email = $_POST['email'];
+            $usuario->nivel_acesso = $_POST['nivel_acesso'];
+            if ($usuario->update()) {
+                header('Location: ../views/usuarios/index.php?status=success_update');
+            } else {
+                echo "Erro ao atualizar usuário.";
+            }
+        }
+        break;
+
+    case 'delete':
+        if (isset($_GET['id'])) {
+            $usuario->id = $_GET['id'];
+            if ($usuario->delete()) {
+                header('Location: ../views/usuarios/index.php?status=success_delete');
+            } else {
+                echo "Erro ao deletar usuário.";
+            }
+        }
+        break;
+
+    case 'edit':
+        if (isset($_GET['id'])) {
+            $usuario->id = $_GET['id'];
+            if ($usuario->readOne()) {
+                include '../views/usuarios/edit.php';
+            } else {
+                echo "Usuário não encontrado.";
+            }
+        }
+        break;
+
+    default:
+        $stmt = $usuario->read();
+        include '../views/usuarios/index.php';
+        break;
+}
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Lista de Usuários</title>
+    <link rel="stylesheet" href="../../../public/css/style.css">
+    <script src="../../../public/js/script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Usuários</h1>
+        <a href="create.php" class="btn">Adicionar Novo Usuário</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Nível de Acesso</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($row['id']); ?></td>
+                    <td><?php echo htmlspecialchars($row['nome']); ?></td>
+                    <td><?php echo htmlspecialchars($row['email']); ?></td>
+                    <td><?php echo htmlspecialchars($row['nivel_acesso']); ?></td>
+                    <td>
+                        <a href="../../controllers/UsuarioController.php?action=edit&id=<?php echo $row['id']; ?>" class="btn">Editar</a>
+                        <a href="#" onclick="confirmDelete(<?php echo $row['id']; ?>)" class="btn btn-danger">Excluir</a>
+                    </td>
+                </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Criar Usuário</title>
+    <link rel="stylesheet" href="../../../public/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Criar Novo Usuário</h1>
+        <form action="../../controllers/UsuarioController.php?action=create" method="POST">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required>
+            <label for="nivel_acesso">Nível de Acesso:</label>
+            <select id="nivel_acesso" name="nivel_acesso">
+                <option value="usuario">Usuário</option>
+                <option value="admin">Admin</option>
+            </select>
+            <button type="submit">Salvar</button>
+        </form>
+        <a href="index.php">Voltar para a lista</a>
+    </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Editar Usuário</title>
+    <link rel="stylesheet" href="../../../public/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Usuário</h1>
+        <form action="../../controllers/UsuarioController.php?action=update" method="POST">
+            <input type="hidden" name="id" value="<?php echo htmlspecialchars($usuario->id); ?>">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($usuario->nome); ?>" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($usuario->email); ?>" required>
+            <label for="nivel_acesso">Nível de Acesso:</label>
+            <select id="nivel_acesso" name="nivel_acesso">
+                <option value="usuario" <?php echo ($usuario->nivel_acesso == 'usuario') ? 'selected' : ''; ?>>Usuário</option>
+                <option value="admin" <?php echo ($usuario->nivel_acesso == 'admin') ? 'selected' : ''; ?>>Admin</option>
+            </select>
+            <button type="submit">Atualizar</button>
+        </form>
+        <a href="index.php">Voltar para a lista</a>
+    </div>
+</body>
+</html>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.btn-danger {
+    background-color: #dc3545;
+}
+form input, form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
