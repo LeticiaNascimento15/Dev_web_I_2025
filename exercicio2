@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>🔍 Analisador de Texto</title>
+</head>
+<body style="font-family: Arial; text-align:center; margin-top: 40px;">
+    <h2>🔍 Analisador de Texto</h2>
+
+    <form method="post">
+        <label>Digite uma frase:</label><br><br>
+        <textarea name="frase" rows="4" cols="50" required><?php echo isset($_POST['frase']) ? $_POST['frase'] : ''; ?></textarea><br><br>
+
+        <label>Palavra para substituir:</label><br>
+        <input type="text" name="palavra_antiga" placeholder="Palavra antiga"><br><br>
+
+        <label>Nova palavra:</label><br>
+        <input type="text" name="palavra_nova" placeholder="Nova palavra"><br><br>
+
+        <button type="submit">Analisar</button>
+    </form>
+
+    <hr style="margin: 30px 0;">
+
+    <?php
+    if (isset($_POST['frase'])) {
+        $frase = $_POST['frase'];
+
+        // 1️⃣ Função para contar palavras
+        function contarPalavras($texto) {
+            $palavras = str_word_count($texto, 1, "áéíóúàãõâêôçÁÉÍÓÚÀÃÕÂÊÔÇ");
+            return count($palavras);
+        }
+
+        // 2️⃣ Função para contar vogais e consoantes
+        function contarVogaisConsoantes($texto) {
+            $texto = strtolower(preg_replace('/[^a-záéíóúàãõâêôç]/u', '', $texto));
+            $vogais = 0;
+            $consoantes = 0;
+            $lista_vogais = ['a','e','i','o','u','á','é','í','ó','ú','â','ê','ô','ã','õ'];
+
+            for ($i = 0; $i < strlen($texto); $i++) {
+                $letra = mb_substr($texto, $i, 1, "UTF-8");
+                if (in_array($letra, $lista_vogais)) {
+                    $vogais++;
+                } else {
+                    $consoantes++;
+                }
+            }
+            return [$vogais, $consoantes];
+        }
+
+        // 3️⃣ Função para encontrar a palavra mais longa
+        function palavraMaisLonga($texto) {
+            $palavras = str_word_count($texto, 1, "áéíóúàãõâêôçÁÉÍÓÚÀÃÕÂÊÔÇ");
+            $maior = "";
+            foreach ($palavras as $p) {
+                if (strlen($p) > strlen($maior)) {
+                    $maior = $p;
+                }
+            }
+            return $maior;
+        }
+
+        // 4️⃣ Função para substituir palavras
+        function substituirPalavra($texto, $antiga, $nova) {
+            if (empty($antiga) || empty($nova)) {
+                return $texto; // se o usuário não quiser substituir nada
+            }
+            return str_ireplace($antiga, $nova, $texto);
+        }
+
+        // Chamando as funções
+        $total_palavras = contarPalavras($frase);
+        list($vogais, $consoantes) = contarVogaisConsoantes($frase);
+        $maior_palavra = palavraMaisLonga($frase);
+        $frase_substituida = substituirPalavra($frase, $_POST['palavra_antiga'], $_POST['palavra_nova']);
+
+        // Mostrando os resultados
+        echo "<h3>📊 Resultados:</h3>";
+        echo "<p><b>Frase original:</b> $frase</p>";
+        echo "<p><b>Total de palavras:</b> $total_palavras</p>";
+        echo "<p><b>Vogais:</b> $vogais | <b>Consoantes:</b> $consoantes</p>";
+        echo "<p><b>Palavra mais longa:</b> $maior_palavra</p>";
+        echo "<p><b>Frase após substituição:</b> $frase_substituida</p>";
+    }
+    ?>
+</body>
+</html>
