@@ -1,0 +1,103 @@
+<?php
+
+$host = "localhost";
+$user = "root";
+$pass = "";
+$banco = "seu_banco";
+
+$conn = new mysqli($host, $user, $pass, $banco);
+
+if ($conn->connect_error) {
+    die("Erro de conexão: " . $conn->connect_error);
+}
+
+$clientes = [];
+
+if (isset($_POST['consultar'])) {
+
+    $repres = $_POST['representante'];
+
+    $sql = "
+        SELECT
+            c.A1_COD,
+            c.A1_NOME,
+            r.A3_COD,
+            r.A3_NOME
+
+        FROM clientes c
+
+        LEFT JOIN represen r
+            ON r.A3_COD = c.A1_VEND
+
+        WHERE r.A3_COD = '$repres'
+
+        ORDER BY c.A1_NOME
+    ";
+
+    $resultado = $conn->query($sql);
+
+    if ($resultado->num_rows > 0) {
+        while ($row = $resultado->fetch_assoc()) {
+            $clientes[] = $row;
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta Clientes</title>
+
+ 
+</head>
+<body>
+
+<div class="box">
+
+    <h2>Consultar Clientes do Representante</h2>
+
+    <form method="POST">
+
+        <label>Código Representante:</label>
+        <br><br>
+
+        <input type="text" name="representante" required>
+
+        <button type="submit" name="consultar">
+            Consultar
+        </button>
+
+    </form>
+
+    <?php if (!empty($clientes)) { ?>
+
+        <table>
+
+            <tr>
+                <th>Cód. Representante</th>
+                <th>Representante</th>
+                <th>Cód. Cliente</th>
+                <th>Cliente</th>
+            </tr>
+
+            <?php foreach ($clientes as $cli) { ?>
+
+                <tr>
+                    <td><?php echo $cli['A3_COD']; ?></td>
+                    <td><?php echo $cli['A3_NOME']; ?></td>
+                    <td><?php echo $cli['A1_COD']; ?></td>
+                    <td><?php echo $cli['A1_NOME']; ?></td>
+                </tr>
+
+            <?php } ?>
+
+        </table>
+
+    <?php } ?>
+
+</div>
+
+</body>
+</html>
