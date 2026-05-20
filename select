@@ -1,0 +1,67 @@
+<?php
+
+require_once 'conexao.php';
+
+
+
+try {
+
+    $pdo = getPDO();
+
+
+
+    $representante = $_POST['representante'];
+
+
+
+    $sql = "
+
+        SELECT
+
+            r.A3_COD,
+            r.A3_NOME,
+
+            c.A1_COD,
+            c.A1_NOME
+
+        FROM represen r
+
+        LEFT JOIN pedidos p
+            ON p.C5_VEND1 = r.A3_COD
+
+        LEFT JOIN clientes c
+            ON c.A1_COD = p.C5_CLIENTE
+
+        WHERE r.A3_COD = '$representante'
+
+        GROUP BY
+
+            r.A3_COD,
+            r.A3_NOME,
+
+            c.A1_COD,
+            c.A1_NOME
+
+        ORDER BY c.A1_NOME
+
+    ";
+
+
+
+    $stmt = $pdo->prepare($sql);
+
+
+
+    $stmt->execute();
+
+
+
+    $clientes = $stmt->fetchAll();
+
+
+
+} catch(PDOException $erro) {
+
+    echo $erro->getMessage();
+
+}
