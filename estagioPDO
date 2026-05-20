@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Consulta Clientes</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial;
+            margin: 30px;
+            background: #f4f4f4;
+
+        }
+
+        .box {
+
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 800px;
+            margin: auto;
+
+        }
+
+        input {
+
+            padding: 10px;
+            width: 250px;
+
+        }
+
+        button {
+
+            padding: 10px 20px;
+            cursor: pointer;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+    <h2>Consultar Clientes do Representante</h2>
+
+    <form action="consulta.php" method="POST">
+
+        <label>Código Representante:</label>
+
+        <br><br>
+
+        <input
+            type="text"
+            name="representante"
+            required
+        >
+
+        <button type="submit">
+            Consultar
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>
+
+
+
+<?php
+
+header('Content-Type:text/html; charset=utf-8');
+
+
+
+function getPDO():PDO {
+
+    $host = 'localhost';
+    $db = 'seubanco';
+    $user = 'root';
+    $pass = '';
+    $charset = 'utf8mb4';
+
+
+
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
+
+
+    $options = [
+
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+
+        PDO::ATTR_PERSISTENT => true
+
+    ];
+
+
+
+    try {
+
+        return new PDO(
+            $dsn,
+            $user,
+            $pass,
+            $options
+        );
+
+    } catch(PDOException $erro) {
+
+        die(
+            "Erro conexão: " .
+            $erro->getMessage()
+        );
+
+    }
+
+}
+
+
+
+$clientes = [];
+
+
+
+if(isset($_POST['representante'])) {
+
+    $representante = trim($_POST['representante']);
+
+
+
+    if(!empty($representante)) {
+
+        $conexao = getPDO();
+
+
+
+        $sql = "
+
+            SELECT
+
+                r.A3_COD,
+                r.A3_NOME,
+
+                c.A1_COD,
+                c.A1_NOME
+
+            FROM represen r
+
+            LEFT JOIN pedidos p
+                ON p.C5_VEND1 = r.A3_COD
+
+            LEFT JOIN clientes c
+                ON c.A1_COD = p.C5_CLIENTE
+
+            WHERE r.A3_COD = :repres
+
+            GROUP BY
+
+                r.A3_COD,
+                r.A3_NOME,
+
+                c.A1_COD,
+                c.A1_NOME
+
+            ORDER BY c.A1_NOME
+
+        ";
+
+
+
+        $comando = $conexao->prepare($sql);
+
+
+
+        $comando->bindParam(
+            ':repres',
+            $representante,
+            PDO::PARAM_STR
+        );
+
+
+
+        $comando->execute();
+
+
+
+        $clientes = $comando->fetchAll();
+
+    }
+
+}
+
+?>
+
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Resultado</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial;
+            margin: 30px;
+            background: #f4f4f4;
+
+        }
+
+        .box {
+
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 900px;
+            margin: auto;
+
+        }
+
+        table {
+
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+
+        }
+
+        table, th, td {
+
+            border: 1px solid #ccc;
+
+        }
+
+        th {
+
+            background: #ddd;
+
+        }
+
+        th, td {
+
+            padding: 10px;
+            text-align: left;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+    <h2>Clientes do Representante</h2>
+
+    <table>
+
+        <tr>
+
+            <th>Cód Representante</th>
+            <th>Representante</th>
+            <th>Cód Cliente</th>
+            <th>Cliente</th>
+
+        </tr>
+
+        <?php
+
+        if(!empty($clientes)) {
+
+            foreach($clientes as $linha) {
+
+                echo "<tr>";
+
+                echo "<td>" . $linha['A3_COD'] . "</td>";
+
+                echo "<td>" . $linha['A3_NOME'] . "</td>";
+
+                echo "<td>" . $linha['A1_COD'] . "</td>";
+
+                echo "<td>" . $linha['A1_NOME'] . "</td>";
+
+                echo "</tr>";
+
+            }
+
+        } else {
+
+            echo "
+
+                <tr>
+
+                    <td colspan='4'>
+                        Nenhum cliente encontrado
+                    </td>
+
+                </tr>
+
+            ";
+
+        }
+
+        ?>
+
+    </table>
+
+</div>
+
+</body>
+
+</html>
