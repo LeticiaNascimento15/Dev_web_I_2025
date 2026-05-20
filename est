@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta Clientes</title>
+</head>
+<body>
+
+<div class="box">
+
+    <h2>Consultar Clientes do Representante</h2>
+
+    <form action="select.php" method="POST">
+        <label>Código Representante:</label>
+        <br><br>
+
+        <input
+            type="text"
+            name="representante"
+            required
+        >
+
+        <button type="submit">
+            Consultar
+        </button>
+    </form>
+</div>
+</body>
+</html>
+
+
+
+<?php
+
+
+function getPDO():PDO {
+
+    $host = 'cloud.uniaomundial.com.br';
+    $db = 'uniaoteste';
+    $user = 'uniaoteste';
+    $pass = 'MunD08dial16unI2019';
+    $charset = 'utf8';
+
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
+    $options = [
+
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_PERSISTENT => true
+
+    ];
+
+$pdo=null;
+
+    try {
+
+        return new PDO(
+            $dsn,
+            $user,
+            $pass,
+            $options
+        );
+
+    } catch(PDOException $erro) {
+
+        die(
+            "Erro conexão: " .
+            $erro->getMessage()
+        );
+
+    }
+return $pdo;
+}
+?>
+
+<?php
+
+require_once 'consulta1.php';
+try {
+
+    $pdo = getPDO();
+    $representante = $_POST['representante'];
+
+    $sql = "
+
+        SELECT
+
+            r.A3_COD,
+            r.A3_NOME,
+
+            c.A1_COD,
+            c.A1_NOME
+
+        FROM represen r
+
+        LEFT JOIN pedidos p
+            ON p.C5_VEND1 = r.A3_COD
+
+        LEFT JOIN clientes c
+            ON c.A1_COD = p.C5_CLIENTE
+
+        WHERE r.A3_COD = '$representante'
+
+        GROUP BY
+
+            r.A3_COD,
+            r.A3_NOME,
+
+            c.A1_COD,
+            c.A1_NOME
+
+        ORDER BY c.A1_NOME
+
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $clientes = $stmt->fetchAll();
+
+} catch(PDOException $erro) {
+    echo $erro->getMessage();
+
+}
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado</title>
+</head>
+<body>
+<div class="box">
+
+    <h2>Clientes do Representante</h2>
+
+    <table>
+
+        <tr>
+
+            <th>Cód Representante</th>
+            <th>Representante</th>
+            <th>Cód Cliente</th>
+            <th>Cliente</th>
+
+        </tr>
+
+        <?php
+
+        if(!empty($clientes)) {
+            foreach($clientes as $linha) {
+
+                echo "<tr>";
+                echo "<td>" . $linha['A3_COD'] . "</td>";
+                echo "<td>" . $linha['A3_NOME'] . "</td>";
+                echo "<td>" . $linha['A1_COD'] . "</td>";
+                echo "<td>" . $linha['A1_NOME'] . "</td>";
+                echo "</tr>";
+
+            }
+
+        } else {
+            echo "
+                <tr>
+
+                    <td colspan='4'>
+                        Nenhum cliente encontrado
+                    </td>
+
+                </tr>
+
+            ";
+
+        }
+
+        ?>
+
+    </table>
+</div>
+</body>
+</html>
