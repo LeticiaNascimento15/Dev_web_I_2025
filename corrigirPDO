@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>MENU</title>
+</head>
+<body>
+<div class="box">
+    <h1>MENU</h1>
+
+    <h2>Representante</h2>
+    <ul>
+        <li>
+            <a href="representante/consultaclienteRep/consulta1/consulta1.html">
+                Consultar Clientes por Representante
+            </a>
+        </li>
+
+        <li>
+            <a href="representante/consultarRepre/consultarR.html">
+                Consultar Representante
+            </a>
+        </li>
+    </ul>
+
+
+
+    <h2>Funcionários</h2>
+    <ul>
+        <li>
+            <a href="funcionarios/consultar/consultarF.html">
+                Consultar Funcionário
+            </a>
+        </li>
+
+        <li>
+            <a href="funcionarios/inserir/inserir.html">
+                Inserir Funcionário
+            </a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
+
+consultarF.html
+  <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultar Funcionário</title>
+</head>
+<body>
+<h2>Consultar Funcionário</h2>
+<form action="consultarF.php" method="POST">
+
+    Código:
+    <br><br>
+    <input type="text" name="codigo">
+    <br><br>
+
+    <button type="submit">
+        Consultar
+    </button>
+
+</form>
+</body>
+</html>
+
+  consultar.php
+  <?php
+
+$codigo = $_POST['codigo'];
+echo "Consultando funcionário código: " . $codigo;
+
+?>
+
+  inserir.html
+  <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Inserir Funcionário</title>
+</head>
+<body>
+<h2>Inserir Funcionário</h2>
+<form action="inserir.php" method="POST">
+    <br><br>
+    ID:
+
+    <br><br>
+    <input type="number" name="ID">
+   
+    <br><br>
+    Nome:
+    <br><br>
+    <input type="text" name="nome">
+
+    <br><br>
+    Cargo:
+
+    <br><br>
+    <input type="text" name="cargo">
+    <br><br>
+    
+    Salario:
+    <br><br>
+    <input type="number" name="Salario">
+
+    <br><br>
+    <button type="submit">
+        Salvar
+
+    </button>
+</form>
+</body>
+</html>
+
+
+  inserir.php
+  <?php
+
+require_once '.php';
+try {
+
+    $pdo = getPDO();
+
+    $id = $_POST['id'];
+    $nome = $_POST['nome'];
+    $cargo = $_POST['cargo'];
+    $salario = $_POST['salario'];
+
+    $sql = "
+
+        INSERT INTO funcionarios (
+            ID,
+            NOME,
+            CARGO,
+            SALARIO
+        )
+        VALUES (
+
+            '$ID',
+            '$nome',
+            '$cargo',
+            '$salario'
+        )
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    echo "
+        <h2>
+            Funcionário inserido com sucesso
+        </h2>
+    ";
+
+} catch(PDOException $erro) {
+    echo $erro->getMessage();
+
+}
+
+?>
+
+consulta1.html Repre
+<!DOCTYPE html>
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta Clientes</title>
+</head>
+<body>
+
+<div class="box">
+
+    <h2>Consultar Clientes do Representante</h2>
+
+    <form action="select.php" method="POST">
+        <label>Código Representante:</label>
+        <br><br>
+
+        <input
+            type="text"
+            name="representante"
+            required
+        >
+
+        <button type="submit">
+            Consultar
+        </button>
+    </form>
+</div>
+</body>
+</html>
+
+consulta1.php
+<?php
+
+
+function getPDO():PDO {
+
+    $host = 'cloud.uniaomundial.com.br';
+    $db = 'uniaoteste';
+    $user = 'uniaoteste';
+    $pass = 'MunD08dial16unI2019';
+    $charset = 'utf8';
+
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
+    $options = [
+
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_PERSISTENT => true
+
+    ];
+
+$pdo=null;
+
+    try {
+
+        return new PDO(
+            $dsn,
+            $user,
+            $pass,
+            $options
+        );
+
+    } catch(PDOException $erro) {
+
+        die(
+            "Erro conexão: " .
+            $erro->getMessage()
+        );
+
+    }
+return $pdo;
+}
+?>
+
+select.php
+<?php
+
+require_once 'consulta1.php';
+try {
+
+    $pdo = getPDO();
+    $representante = $_POST['representante'];
+
+    $sql = "
+
+        SELECT
+
+            r.A3_COD,
+            r.A3_NOME,
+
+            c.A1_COD,
+            c.A1_NOME
+
+        FROM represen r
+
+        LEFT JOIN pedidos p
+            ON p.C5_VEND1 = r.A3_COD
+
+        LEFT JOIN clientes c
+            ON c.A1_COD = p.C5_CLIENTE
+
+        WHERE r.A3_COD = '$representante'
+
+        GROUP BY
+
+            r.A3_COD,
+            r.A3_NOME,
+
+            c.A1_COD,
+            c.A1_NOME
+
+        ORDER BY c.A1_NOME
+
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $clientes = $stmt->fetchAll();
+
+} catch(PDOException $erro) {
+    echo $erro->getMessage();
+
+}
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado</title>
+</head>
+<body>
+<div class="box">
+
+    <h2>Clientes do Representante</h2>
+
+    <table>
+
+        <tr>
+
+            <th>Cód Representante</th>
+            <th>Representante</th>
+            <th>Cód Cliente</th>
+            <th>Cliente</th>
+
+        </tr>
+
+        <?php
+
+        if(!empty($clientes)) {
+            foreach($clientes as $linha) {
+
+                echo "<tr>";
+                echo "<td>" . $linha['A3_COD'] . "</td>";
+                echo "<td>" . $linha['A3_NOME'] . "</td>";
+                echo "<td>" . $linha['A1_COD'] . "</td>";
+                echo "<td>" . $linha['A1_NOME'] . "</td>";
+                echo "</tr>";
+
+            }
+
+        } else {
+            echo "
+                <tr>
+
+                    <td colspan='4'>
+                        Nenhum cliente encontrado
+                    </td>
+
+                </tr>
+
+            ";
+
+        }
+
+        ?>
+
+    </table>
+</div>
+</body>
+</html>
+
+consultarRepre
+          conexao.php
+    <?php
+function getPDO():PDO {
+
+    $host = 'cloud.uniaomundial.com.br';
+    $db = 'uniaoteste';
+    $user = 'uniaoteste';
+    $pass = 'MunD08dial16unI2019';
+    $charset = 'utf8';
+
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
+    $options = [
+
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_PERSISTENT => true
+
+    ];
+
+$pdo=null;
+
+    try {
+
+        return new PDO(
+            $dsn,
+            $user,
+            $pass,
+            $options
+        );
+
+    } catch(PDOException $erro) {
+
+        die(
+            "Erro conexão: " .
+            $erro->getMessage()
+        );
+
+    }
+return $pdo;
+}
+?>
+
+
+consultarR.html
+  <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultar Representante</title>
+</head>
+<body>
+<div class="box">
+<h2>Consultar Representante</h2>
+<form action="consultarR.php" method="POST">
+
+    Código Representante:
+    <br><br>
+    <input
+        type="text"
+        name="representante"
+        required
+    >
+    <br><br>
+
+    <button type="submit">
+        Consultar
+    </button>
+
+</form>
+</div>
+</body>
+</html>
+
+  consultarR.php
+
+  <?php
+require_once 'conexao.php';
+try {
+
+    $pdo = getPDO();
+
+    $representante = $_POST['representante'];
+
+    $sql = "
+
+        SELECT
+
+            A3_COD,
+            A3_NOME
+
+        FROM represen
+        WHERE A3_COD = '$representante'
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $dados = $stmt->fetchAll();
+
+} catch(PDOException $erro) {
+    echo $erro->getMessage();
+
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado</title>
+</head>
+<body>
+<div class="box">
+
+    <h2>Consultar Representante</h2>
+    <table>
+
+        <tr>
+
+            <th>Cód Representante</th>
+            <th>Nome Representante</th>
+
+        </tr>
+
+        <?php
+
+        if(!empty($representante)) {
+            foreach($representante as $linha) {
+
+                echo "<tr>";
+                echo "<td>" . $linha['A3_COD'] . "</td>";
+                echo "<td>" . $linha['A3_NOME'] . "</td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "
+                <tr>
+
+                    <td colspan='4'>
+                        Nenhum cliente encontrado
+                    </td>
+
+                </tr>
+
+            ";
+
+        }
+
+        ?>
+
+    </table>
+</div>
+</body>
+</html>
+
+  
