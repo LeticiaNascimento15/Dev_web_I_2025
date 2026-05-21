@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>MENU</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 40px;
+
+        }
+
+        .box {
+
+            background: white;
+            width: 500px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+
+        }
+
+        h2 {
+
+            background: #ddd;
+            padding: 10px;
+
+        }
+
+        ul {
+
+            list-style: none;
+            padding: 0;
+
+        }
+
+        li {
+
+            margin: 10px 0;
+
+        }
+
+        a {
+
+            text-decoration: none;
+            font-size: 18px;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+    <h1>MENU SISTEMA</h1>
+
+    <h2>Representante</h2>
+
+    <ul>
+
+        <li>
+
+            <a href="representante/consultar1.html">
+
+                Consultar Clientes por Representante
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="representante/consulta1.php">
+
+                Consultar Representante
+
+            </a>
+
+        </li>
+
+    </ul>
+
+
+
+    <h2>Funcionários</h2>
+
+    <ul>
+
+        <li>
+
+            <a href="funcionarios/incluir.html">
+
+                Inserir Funcionário
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="funcionarios/consultar.html">
+
+                Consultar Funcionário
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</div>
+
+</body>
+
+</html>
+
+funcionario/incluir.html
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Inserir Funcionário</title>
+
+</head>
+
+<body>
+
+<h2>Inserir Funcionário</h2>
+
+<form action="inserir.php" method="POST">
+
+    Nome:
+    <br><br>
+
+    <input type="text" name="nome">
+
+    <br><br>
+
+    Cargo:
+    <br><br>
+
+    <input type="text" name="cargo">
+
+    <br><br>
+
+    <button type="submit">
+
+        Salvar
+
+    </button>
+
+</form>
+
+</body>
+
+</html>
+
+Finserir.php
+<?php
+
+echo "Funcionário inserido com sucesso";
+
+?>
+
+FConsultar.html
+
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Consultar Funcionário</title>
+
+</head>
+
+<body>
+
+<h2>Consultar Funcionário</h2>
+
+<form action="consultar.php" method="POST">
+
+    Código:
+    <br><br>
+
+    <input type="text" name="codigo">
+
+    <br><br>
+
+    <button type="submit">
+
+        Consultar
+
+    </button>
+
+</form>
+
+</body>
+
+</html>
+FConsulta.php
+<?php
+
+$codigo = $_POST['codigo'];
+
+echo "Consultando funcionário código: " . $codigo;
+
+?>
+
+Rconsultar.html
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Consultar Representante</title>
+
+</head>
+
+<body>
+
+<h2>Consultar Representante</h2>
+
+<form action="consultarRep.php" method="POST">
+
+    Código Representante:
+
+    <br><br>
+
+    <input
+        type="text"
+        name="representante"
+        required
+    >
+
+    <br><br>
+
+    <button type="submit">
+
+        Consultar
+
+    </button>
+
+</form>
+
+</body>
+
+</html>
+Rconsultar.php
+<?php
+
+require_once '../conexao.php';
+
+
+
+try {
+
+    $pdo = getPDO();
+
+
+
+    $representante = $_POST['representante'];
+
+
+
+    $sql = "
+
+        SELECT
+
+            A3_COD,
+            A3_NOME
+
+        FROM represen
+
+        WHERE A3_COD = '$representante'
+
+    ";
+
+
+
+    $stmt = $pdo->prepare($sql);
+
+
+
+    $stmt->execute();
+
+
+
+    $dados = $stmt->fetchAll();
+
+
+
+} catch(PDOException $erro) {
+
+    echo $erro->getMessage();
+
+}
+
+?>
+
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Resultado</title>
+
+    <style>
+
+        table {
+
+            border-collapse: collapse;
+            width: 500px;
+
+        }
+
+        table, th, td {
+
+            border: 1px solid black;
+
+        }
+
+        th, td {
+
+            padding: 10px;
+
+        }
+
+        th {
+
+            background: #ddd;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h2>Representante</h2>
+
+<table>
+
+    <tr>
+
+        <th>Código</th>
+        <th>Nome</th>
+
+    </tr>
+
+    <?php
+
+    foreach($dados as $linha) {
+
+        echo "<tr>";
+
+        echo "<td>" . $linha['A3_COD'] . "</td>";
+
+        echo "<td>" . $linha['A3_NOME'] . "</td>";
+
+        echo "</tr>";
+
+    }
+
+    ?>
+
+</table>
+
+</body>
+
+</html>
