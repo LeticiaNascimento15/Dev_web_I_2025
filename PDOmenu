@@ -173,7 +173,70 @@ funcionario/incluir.html
 Finserir.php
 <?php
 
-echo "Funcionário inserido com sucesso";
+require_once '../conexao.php';
+
+
+
+try {
+
+    $pdo = getPDO();
+
+
+
+    $codigo = $_POST['codigo'];
+    $nome = $_POST['nome'];
+    $cargo = $_POST['cargo'];
+    $salario = $_POST['salario'];
+
+
+
+    $sql = "
+
+        INSERT INTO funcionarios (
+
+            CODIGO,
+            NOME,
+            CARGO,
+            SALARIO
+
+        )
+
+        VALUES (
+
+            '$codigo',
+            '$nome',
+            '$cargo',
+            '$salario'
+
+        )
+
+    ";
+
+
+
+    $stmt = $pdo->prepare($sql);
+
+
+
+    $stmt->execute();
+
+
+
+    echo "
+
+        <h2>
+            Funcionário inserido com sucesso
+        </h2>
+
+    ";
+
+
+
+} catch(PDOException $erro) {
+
+    echo $erro->getMessage();
+
+}
 
 ?>
 
