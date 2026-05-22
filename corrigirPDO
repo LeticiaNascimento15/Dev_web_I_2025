@@ -368,7 +368,6 @@ function getPDO():PDO {
 
     ];
 
-$pdo=null;
 
     try {
 
@@ -387,7 +386,7 @@ $pdo=null;
         );
 
     }
-return $pdo;
+
 }
 ?>
 
@@ -474,8 +473,9 @@ try {
 
         <?php
 
-        if(!empty($representante)) {
-            foreach($representante as $linha) {
+        if(!empty($dados)) {
+
+    foreach($dados as $linha) {
 
                 echo "<tr>";
                 echo "<td>" . $linha['A3_COD'] . "</td>";
