@@ -70,10 +70,113 @@ consultarF.html
   consultar.php
   <?php
 
-$codigo = $_POST['codigo'];
-echo "Consultando funcionário código: " . $codigo;
+require_once 'conexao.php';
+
+try {
+
+    $pdo = getPDO();
+
+    $codigo = $_POST['codigo'];
+
+    $sql = "
+
+        SELECT
+
+            ID,
+            NOME,
+            CARGO,
+            SALARIO
+
+        FROM funcionarios
+
+        WHERE ID = '$codigo'
+
+    ";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute();
+
+    $dados = $stmt->fetchAll();
+
+} catch(PDOException $erro) {
+
+    echo $erro->getMessage();
+
+}
 
 ?>
+
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Resultado</title>
+
+</head>
+
+<body>
+
+<h2>Funcionário</h2>
+
+<table border="1">
+
+    <tr>
+
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Cargo</th>
+        <th>Salário</th>
+
+    </tr>
+
+    <?php
+
+    if(!empty($dados)) {
+
+        foreach($dados as $linha) {
+
+            echo "<tr>";
+
+            echo "<td>" . $linha['ID'] . "</td>";
+
+            echo "<td>" . $linha['NOME'] . "</td>";
+
+            echo "<td>" . $linha['CARGO'] . "</td>";
+
+            echo "<td>" . $linha['SALARIO'] . "</td>";
+
+            echo "</tr>";
+
+        }
+
+    } else {
+
+        echo "
+
+            <tr>
+
+                <td colspan='4'>
+                    Funcionário não encontrado
+                </td>
+
+            </tr>
+
+        ";
+
+    }
+
+    ?>
+
+</table>
+
+</body>
+
+</html>
 
   inserir.html
   <!DOCTYPE html>
@@ -86,10 +189,8 @@ echo "Consultando funcionário código: " . $codigo;
 <h2>Inserir Funcionário</h2>
 <form action="inserir.php" method="POST">
     <br><br>
-    ID:
+   input type="number" name="id">
 
-    <br><br>
-    <input type="number" name="ID">
    
     <br><br>
     Nome:
@@ -102,10 +203,9 @@ echo "Consultando funcionário código: " . $codigo;
     <br><br>
     <input type="text" name="cargo">
     <br><br>
-    
     Salario:
-    <br><br>
-    <input type="number" name="Salario">
+     <br><br>
+   <input type="number" name="salario">
 
     <br><br>
     <button type="submit">
@@ -118,9 +218,10 @@ echo "Consultando funcionário código: " . $codigo;
 
 
   inserir.php
-  <?php
+ <?php
 
-require_once '.php';
+require_once 'conexao.php';
+
 try {
 
     $pdo = getPDO();
@@ -133,29 +234,39 @@ try {
     $sql = "
 
         INSERT INTO funcionarios (
+
             ID,
             NOME,
             CARGO,
             SALARIO
+
         )
+
         VALUES (
 
-            '$ID',
+            '$id',
             '$nome',
             '$cargo',
             '$salario'
+
         )
+
     ";
 
     $stmt = $pdo->prepare($sql);
+
     $stmt->execute();
+
     echo "
+
         <h2>
             Funcionário inserido com sucesso
         </h2>
+
     ";
 
 } catch(PDOException $erro) {
+
     echo $erro->getMessage();
 
 }
