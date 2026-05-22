@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>MENU</title>
+
+    <style>
+
+        * {
+
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+        body {
+
+            font-family: Arial;
+            background: #f4f4f4;
+
+        }
+
+        .menu {
+
+            background: #333;
+
+        }
+
+        .menu ul {
+
+            list-style: none;
+            display: flex;
+
+        }
+
+        .menu ul li {
+
+            position: relative;
+
+        }
+
+        .menu ul li a {
+
+            display: block;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+
+        }
+
+        .menu ul li:hover {
+
+            background: #ff4d7a;
+
+        }
+
+        .submenu {
+
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 0;
+            background: #444;
+            min-width: 250px;
+
+        }
+
+        .submenu li {
+
+            width: 100%;
+
+        }
+
+        .menu ul li:hover .submenu {
+
+            display: block;
+
+        }
+
+        .submenu li a:hover {
+
+            background: #666;
+
+        }
+
+        h1 {
+
+            padding: 40px;
+            text-align: center;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="menu">
+
+    <ul>
+
+        <li>
+
+            <a href="index.html">
+
+                HOME
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="#">
+
+                REPRESENTANTE
+
+            </a>
+
+            <ul class="submenu">
+
+                <li>
+
+                    <a href="representante/consultarRep.html">
+
+                        Consultar Representante
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="representante/consultarR.html">
+
+                        Clientes por Representante
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </li>
+
+        <li>
+
+            <a href="#">
+
+                FUNCIONÁRIOS
+
+            </a>
+
+            <ul class="submenu">
+
+                <li>
+
+                    <a href="funcionarios/inserir.html">
+
+                        Inserir Funcionário
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="funcionarios/consultarF.html">
+
+                        Consultar Funcionário
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </li>
+
+    </ul>
+
+</nav>
+
+<h1>
+
+    Sistema PHP + MySQL
+
+</h1>
+
+</body>
+
+</html>
