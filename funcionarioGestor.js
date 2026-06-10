@@ -13,7 +13,7 @@ try{
 })
 
 const tblFuncionarios= document.querySelector('#tblFuncionarios tbody');
-tblFuncionario.addEventListener('click',async e=>{
+tblFuncionarios.addEventListener('click',async e=>{
     const alvoClique=e.target;
     const elementoDOM=alvoClique;
     if(elementoDOM.tagName==='BUTTON'){
@@ -22,7 +22,7 @@ tblFuncionario.addEventListener('click',async e=>{
             if(confirm('Deseja realmene remover o registro de id'+botao.dataset.id+'?')){
                 try{
                     await remove(botao.dataset.id);
-                    let alunos = await lista();
+                    let funcionarios = await lista();
                     preencheTabela(funcionarios);
                 }catch(erro){
                     exibeErro(spanErro,erro.message, 3000);

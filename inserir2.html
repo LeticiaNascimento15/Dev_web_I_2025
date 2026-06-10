@@ -1,0 +1,48 @@
+    <meta charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <script type="module" src="funcionarioGestor.js" defer></script>
+    <title>MENU</title>
+</head>
+<body>
+    <head>
+        <hr>
+        <h2>Menu principal</h2>
+        <hr>
+    </head>
+    <main>
+        <span id="erro" style="color: red;"></span>
+        <form id="formFuncionario" action="processaAluno.php" method="POST">
+            <label for="nome">Funcionario: </label>
+                <input id="nome" name="nome" type="text" required/>
+            <label for="nome">Id: </label>
+                 <input type="number" name="id">
+            <label for="nome">Nome: </label>
+                <input type="text" name="nome">
+            <label for="nome">Cargo: </label>
+                <input type="text" name="cargo">
+            <label for="nome">Salario: </label>
+                <input type="number" name="salario">
+                <input id="btnEnviar" type="submit" value="inserir">
+        </form>
+        <h3 id="dados" class="info"></h3>
+        <hr>
+        <span id="FuncionarioNome" class="info"></span> <br/>
+      
+    <table border=1 id="tblFuncionarios">
+<thead>
+<tr>
+    <th>ID</th><th>Nome</th><th>ID</th><th>CARGO</th><th>SALARIO</th>
+</tr>
+</thead>
+<tbody>
+
+</tbody>
+<tfoot></tfoot>
+    </table>
+        <a href="app/funcionario/">Funcionario</a>
+        <!-- outros -->
+    </main>
+    <footer></footer>
+</body>
