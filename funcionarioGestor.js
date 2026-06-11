@@ -1,5 +1,5 @@
 import { limpaElementos, exibeErro, limpaForm } from "../js/verifica.js";
-import { spanErro, formFuncionario,preencheTabela } from "./tabela.js";
+import { spanErro, formFuncionario,preencheTabela,preencheDados, valida } from "./tabela.js";
 import { insere, lista, remove } from "./funcionarioApi.js";
 
 document.addEventListener('DOMContentLoaded', async ()=>{
@@ -40,10 +40,11 @@ formFuncionario.addEventListener('submit', async e => {
     e.preventDefault();
     limpaElementos('.info');
     //montar um objeto funcionario a partir dos inputs
+    console.log(funcionarioNome);
     let funcionario = {
-        nome: document.querySelector('#nome').value.trim(),
-        cargo: document.querySelector('#cargo').value.trim(),
-        salario: Number(document.querySelector('#salario').value)
+        nome: document.querySelector('#funcionarioNome').value,
+        cargo: document.querySelector('#funcionarioCargo').value,
+        salario: Number(document.querySelector('#funcionarioSalario').value)
     }
     //Tratamento de erros
     let msgErro = valida( funcionario );

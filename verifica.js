@@ -9,7 +9,15 @@ async function fazRequisicaoAA(uri, metodo, dados =null){
 }
 
 
-
+function fazRequisicao(uri, metodo, dados =null){
+    if(metodo==='GET')
+        return fetch(uri);
+    return fetch(uri, {
+        method: metodo,
+        headers: {"Content-Type" : "application/json; charset=UTF-8"},
+        body: dados?JSON.stringify(dados):null
+    })
+}
 async function verificaErros( resp ){
     let dados = null;
     try{
@@ -45,4 +53,4 @@ function limpaForm(elementoForm){
     elementoForm.reset();
 }
 
-export { fazRequisicaoAA, verificaErros, exibeErro, limpaElementos, limpaForm}
+export { fazRequisicaoAA, fazRequisicao, verificaErros, exibeErro, limpaElementos, limpaForm}

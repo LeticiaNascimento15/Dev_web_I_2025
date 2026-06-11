@@ -1,5 +1,22 @@
 const formFuncionario = document.querySelector('#formFuncionario');
 const spanErro = document.querySelector('#erro');
+function preencheDados({nome,cargo,salario}){
+    document.querySelector('#dados').textContent="Dados funcionarios";
+    document.querySelector('#funcionarioNome').textContent='Nome:${nome}';
+    document.querySelector('#funcionarioCargo').textContent='Cargo: ${Cargo}';
+    document.querySelector('#funcionarioSalario').textContent='Salario: ${Salario}';
+
+}
+function valida({nome, cargo, salario}){
+    if(!funcionarioNome) return "Preencha o nome.";
+    if(!funcionarioCargo) return "Preencha o cargo.";
+    if( Number.isNaN(funcionarioSalario))
+        return "Salario precisa conter valores numéricos";
+    /*if( nota1<0 || nota1>10 || nota2<0 || nota2>10 )
+        return "As notas devem estar entre 0 e 10.";*/
+    return null;
+}
+
 
 function preencheTabela(funcionarios){
     const corpoTbl=document.querySelector('#tblfuncionario tbody');
@@ -15,14 +32,15 @@ function preencheTabela(funcionarios){
         tdNome.textContent=nome;
         tdCargo.textContent=cargo;
         tdSalario.textContent=salario;
+
         const[btnExcluir,btnAlterar]=['button','button'].map(btn =>document.createElement(btn));
         btnExcluir.dataset.id=id;
         btnExcluir.textContent='[EXCLUIR]';
         btnAlterar.dataset.id=id;
         btnAlterar.textContent='[ALTERAR]';
         tdAcoes.append(btnExcluir,btnAlterar);
-        linha.append(tdId,tdNome,tdCargo,tdSalario,tdAcoes);
+    linha.append(tdId,tdNome,tdCargo,tdSalario,tdAcoes);
         corpoTbl.appendChild(linha);
     });
 }
-export { preencheTabela,formFuncionario, spanErro }
+export { preencheTabela, valida, preencheDados, formFuncionario, spanErro }
