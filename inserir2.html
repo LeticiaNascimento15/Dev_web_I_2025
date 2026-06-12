@@ -14,8 +14,7 @@
     <main>
         <span id="erro" style="color: red;"></span>
         <form id="formFuncionario" action="processaAluno.php" method="POST">
-            <label for="nome">Funcionario: </label>
-                <input id="nome" name="nome" type="text" required/>
+            
             <label for="nome">Id: </label>
                  <input type="number" name="id">
             <label for="nome">Nome: </label>
@@ -28,7 +27,10 @@
         </form>
         <h3 id="dados" class="info"></h3>
         <hr>
-        <span id="FuncionarioNome" class="info"></span> <br/>
+        <span id="funcionarioNome" class="info"></span> <br/>
+        <span id="funcionarioCargo" class="info"></span> <br/>
+        <span id="funcionarioSalario" class="info"></span> <br/>
+
       
     <table border=1 id="tblFuncionarios">
 <thead>
@@ -37,7 +39,6 @@
 </tr>
 </thead>
 <tbody>
-
 </tbody>
 <tfoot></tfoot>
     </table>

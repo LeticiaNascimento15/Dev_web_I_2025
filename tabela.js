@@ -17,9 +17,17 @@ function valida({nome, cargo, salario}){
     return null;
 }
 
+function preencheForm ({Id, nome, cargo, salario }){
+    formFuncionario.id.value = Id;
+    formFuncionario.nome.value=nome;
+    formFuncionario.cargo.value=cargo;
+    formFuncionario.salario.value=salario;
+    formFuncionario.btnEnviar.vaalue="Calcular e alterar";
+
+}
 
 function preencheTabela(funcionarios){
-    const corpoTbl=document.querySelector('#tblfuncionario tbody');
+    const corpoTbl=document.querySelector('#tblFuncionarios tbody');
     while(corpoTbl.firstChild)
         corpoTbl.removeChild(corpoTbl.firstChild);
 
