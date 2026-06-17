@@ -1,33 +1,21 @@
 <?php
-
-
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-
-
-require_once "../../util/conexaoI2.php";
-
-try {
-
-    $pdo = getPDO();
-
-    $sql = "SELECT * FROM funcionario";
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-
-    $funcionarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    header('Content-Type: application/json; charset=utf-8');
-
-    echo json_encode($funcionarios, JSON_UNESCAPED_UNICODE);
-
-} catch (Throwable $e) {
-
-    http_response_code(500);
-
-    echo json_encode([
-        "erro" => $e->getMessage()
-    ]);
+declare(strict_types=1);
+require_once "../../util/funcoes.php";
+require_once "../model/funcoesBD.php";
+$funcionarios = []; 
+try{
+ /**@var callable $listar*/
+ $funcionarios = $listar();
+ 
+} catch (PDOException $e) {
+responderJson(["erro" => "erro ao listar funcionarios"], 400);
 }
+responderJson($funcionarios , 200);
+/*
+Conecta ao banco via PDO.
+Tenta buscar todos os alunos.
+Se funcionar, retorna todos os registros em JSON.
+Se der erro, retorna uma mensagem de erro em JSON com código 400.
+*/
+ 
+?>

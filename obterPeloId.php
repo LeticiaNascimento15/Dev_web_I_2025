@@ -1,17 +1,15 @@
 <?php
 declare(strict_types=1);
-require_once '../../util/funcoesUtil.php';
-$id=(int)$_GET['id'];
-$aluno=null;
+require_once '../../util/funcoes.php';
+require_once '../model/funcoesBD.php';
+require_once '../model/funcoes.php';
+$id = validarId($_GET['id']);
+$funcionario=null;
 $pdo=getPDO();
 try{
-    $sql="SELECT id,nome,nota1,nota2,media,grau FROM aluno WHERE id=:ID";
-    $stmt= $pdo ->prepare($sql);
-    $stmt -> bindParam(":ID",$id,PDO::PARAM_INT);
-    $stmt -> execute();
-    $aluno=$stmt->fetch(PDO::FETCH_ASSOC);
+    /**@var callable $obterPeloId */
+    $funcionario = $obterPeloId($id);
 }catch(PDOException $e){
-    responderJson(["erro" =>"Erro ao obter aluno {$e->getMessage()}"], 400);
+    responderJson(["erro" =>"Erro ao obter funcionario {$e->getMessage()}"], 400);
 }
-
- responderJson($aluno , 200);
+ responderJson($funcionario , 200);
