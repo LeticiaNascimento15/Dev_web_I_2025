@@ -1,0 +1,95 @@
+<?php
+
+require_once 'conexao.php';
+
+try {
+
+    $pdo = getPDO();
+
+    $nome = $_POST['nome'];
+
+    $sql = "
+
+        SELECT
+
+            A3_COD,
+            A3_NOME
+
+        FROM represen
+
+        WHERE A3_NOME LIKE '%$nome%'
+
+        ORDER BY A3_NOME
+
+    ";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute();
+
+    $dados = $stmt->fetchAll();
+
+} catch(PDOException $erro) {
+
+    echo $erro->getMessage();
+
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado</title>
+</head>
+<body>
+
+<h2>Representantes Encontrados</h2>
+
+<table border="1">
+
+    <tr>
+
+        <th>Código</th>
+        <th>Nome</th>
+
+    </tr>
+
+    <?php
+
+    if(!empty($dados)) {
+
+        foreach($dados as $linha) {
+
+            echo "<tr>";
+
+            echo "<td>".$linha['A3_COD']."</td>";
+            echo "<td>".$linha['A3_NOME']."</td>";
+
+            echo "</tr>";
+
+        }
+
+    } else {
+
+        echo "
+
+        <tr>
+
+            <td colspan='2'>
+                Nenhum representante encontrado
+            </td>
+
+        </tr>
+
+        ";
+
+    }
+
+    ?>
+
+</table>
+
+</body>
+</html>
