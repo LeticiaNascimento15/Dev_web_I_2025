@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-//require_once '../model/funcoes.php';
+require_once '../model/funcoes.php';
 require_once '../model/funcoesBD.php';
 require_once '../../util/funcoes.php';
 
