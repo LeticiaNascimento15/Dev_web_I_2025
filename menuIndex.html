@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>MENU</title>
+
+    <h3> Menu para testes de banco de dados</h3>
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+        }
+
+        .menu {
+            background: #000000;
+        }
+
+        .menu ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .menu ul li {
+            position:relative;
+
+        }
+
+        .menu ul li a {
+
+            display: block;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+
+        }
+        .menu ul li:hover {
+            background: #de8eaf;
+
+        }
+
+        .submenu {
+
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 0;
+            background: #000000;
+            min-width: 330px;
+
+        }
+
+        .submenu li {
+            width: 190%;
+
+        }
+
+        .menu ul li:hover .submenu {
+            display: block;
+
+        }
+
+        .submenu li a:hover {
+            background: #000000;
+        }
+
+        h3 {
+            padding: 50px;
+            text-align: center;
+
+        }
+
+    </style>
+</head>
+<body>
+<nav class="menu">
+
+    <ul>
+        <li>
+            <a href="index.html">
+                HOME
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                REPRESENTANTE
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="representante/consultarRepre/consultarR.html">
+                        Consultar Representante
+                    </a>
+                </li>
+                <li>
+                    <a href="representante/consultaclienteRep/consulta1/consulta1.html">
+                        Clientes por Representante
+                    </a>
+                </li>
+                <li>
+                    <a href="representante/consultaNome/consultarNome.html">
+                        Consultar representante por nome
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">
+                FUNCIONÁRIOS
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="funcionario1/consultar/consultarF1.html">
+                        Consultar Funcionário
+                    </a>
+                </li>
+                <li>
+                    <a href="funcionario1/inserir/inserir1.html">
+                        Inserir Funcionário
+                    </a>
+                </li>
+                <li>
+                    <a href="funcionario1/alterar/alterar.html">
+                        Alterar Funcionário
+                    </a>
+                </li>
+                <li>
+                    <a href="funcionario1/remover/remover.html">
+                        Remover Funcionário
+                    </a>
+                </li>
+                <li>
+                    <a href="funcionario1/consultaNome/consultarNome.html">
+                        Consultar nome do funcionario
+                    </a>
+                </li>
+            </ul>
+
+        </li>
+    </ul>
+
+</nav>
+</body>
+</html>
