@@ -1,0 +1,103 @@
+<?php
+
+require_once 'funcionarioDAO.php';
+
+if(isset($_POST['salvar']))
+{
+    inserirFuncionario(
+        $_POST['nome'],
+        $_POST['cargo'],
+        $_POST['salario']
+    );
+}
+
+if(isset($_GET['excluir']))
+{
+    excluirFuncionario($_GET['excluir']);
+}
+
+$funcionarios = listarFuncionarios();
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Funcionários</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Cadastro de Funcionários</h2>
+
+<form method="post">
+
+    <input
+        type="text"
+        name="nome"
+        placeholder="Nome"
+        required
+    >
+
+    <input
+        type="text"
+        name="cargo"
+        placeholder="Cargo"
+        required
+    >
+
+    <input
+        type="number"
+        step="0.01"
+        name="salario"
+        placeholder="Salário"
+        required
+    >
+
+    <button type="submit" name="salvar">
+        Salvar
+    </button>
+
+</form>
+
+<hr>
+
+<table>
+
+<tr>
+    <th>ID</th>
+    <th>Nome</th>
+    <th>Cargo</th>
+    <th>Salário</th>
+    <th>Ações</th>
+</tr>
+
+<?php foreach($funcionarios as $f): ?>
+
+<tr>
+
+    <td><?= $f['id'] ?></td>
+
+    <td><?= $f['nome'] ?></td>
+
+    <td><?= $f['cargo'] ?></td>
+
+    <td><?= $f['salario'] ?></td>
+
+    <td>
+
+        <a href="?excluir=<?= $f['id'] ?>">
+            Excluir
+        </a>
+
+    </td>
+
+</tr>
+
+<?php endforeach; ?>
+
+</table>
+
+</body>
+</html>
