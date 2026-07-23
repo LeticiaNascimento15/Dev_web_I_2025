@@ -1,0 +1,50 @@
+<?php
+require_once 'funcionarioBD.php';
+
+// salvar
+if(isset($_POST['salvar'])){
+
+    inserir([
+        'nome' => $_POST['nome'],
+        'cargo' => $_POST['cargo'],
+        'salario' => $_POST['salario']
+    ]);
+
+    header('Location: funcionario.php');
+    exit;
+}
+
+// alterar
+if(isset($_POST['alterar'])){
+
+    alterar([
+        'id' => $_POST['id'],
+        'nome' => $_POST['nome'],
+        'cargo' => $_POST['cargo'],
+        'salario' => $_POST['salario']
+    ]);
+
+    header('Location: funcionario.php');
+    exit;
+}
+
+// excluir
+if(isset($_GET['excluir'])){
+
+    remover($_GET['excluir']);
+
+    header('Location: funcionario.php');
+    exit;
+}
+
+// editar
+$funcionario = null;
+
+if(isset($_GET['editar'])){
+    $funcionario = obterPeloId($_GET['editar']);
+}
+
+// listar
+$funcionarios = listar();
+
+require 'funcionario.php.html';
