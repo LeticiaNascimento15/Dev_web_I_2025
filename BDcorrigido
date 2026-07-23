@@ -1,0 +1,87 @@
+<?php
+
+require_once 'conexao.php';
+
+$pdo = getPDO();
+
+function inserir(array $funcionario): void
+{
+    global $pdo;
+
+    $sql = "INSERT INTO funcionario(nome, cargo, salario)
+            VALUES(:NOME, :CARGO, :SALARIO)";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindValue(':NOME', $funcionario['nome']);
+    $stmt->bindValue(':CARGO', $funcionario['cargo']);
+    $stmt->bindValue(':SALARIO', $funcionario['salario']);
+
+    $stmt->execute();
+}
+
+
+function listar(): array
+{
+    global $pdo;
+
+    $sql = "SELECT * FROM funcionario";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+function obterPeloId(int $id): array|null
+{
+    global $pdo;
+
+    $sql = "SELECT * FROM funcionario WHERE id = :ID";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindValue(':ID', $id, PDO::PARAM_INT);
+
+    $stmt->execute();
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+
+function alterar(array $funcionario): void
+{
+    global $pdo;
+
+    $sql = "UPDATE funcionario
+            SET nome = :NOME,
+                cargo = :CARGO,
+                salario = :SALARIO
+            WHERE id = :ID";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindValue(':NOME', $funcionario['nome']);
+    $stmt->bindValue(':CARGO', $funcionario['cargo']);
+    $stmt->bindValue(':SALARIO', $funcionario['salario']);
+    $stmt->bindValue(':ID', $funcionario['id'], PDO::PARAM_INT);
+
+    $stmt->execute();
+}
+
+
+function remover(int $id): void
+{
+    global $pdo;
+
+    $sql = "DELETE FROM funcionario WHERE id = :ID";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindValue(':ID', $id, PDO::PARAM_INT);
+
+    $stmt->execute();
+}
+
+?>
