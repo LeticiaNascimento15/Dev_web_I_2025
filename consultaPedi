@@ -1,0 +1,79 @@
+<?php
+
+require_once 'conexaoP.php';
+
+try {
+
+    $pdo = getPDO();
+    $codigo = $_POST['codigo'];
+    $sql = "
+        SELECT
+            p.vltotal as ValorTotal,
+            c.A1_NOME as Cliente,
+            c.A1_COD,
+            COUNT(p.codipedi) 'QTD_PEDIDOS'
+        
+        FROM clientes c JOIN pedidos p ON (p.C5_CLIENTE=c.A1_COD)
+        WHERE A1_COD = '$codigo'
+        ORDER BY c.A1_NOME ASC
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $dados = $stmt->fetchAll();
+} catch(PDOException $erro) {
+    echo $erro->getMessage();
+
+}
+
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado</title>
+</head>
+
+<body>
+<h2>Pedidos</h2>
+<table border="1">
+
+    <tr>
+        <th>ValorTotal</th>
+        <th>Cliente</th>
+        <th>Codigo</th>
+        <th>QTD_PEDIDOS</th>
+        <th>Alterar</th>
+    </tr>
+
+    <?php
+
+    if(!empty($dados)) {
+        foreach($dados as $linha) {
+
+            echo "<tr>";
+            echo "<td>" . $linha['ValorTotal'] . "</td>";
+            echo "<td>" . $linha['Cliente'] . "</td>";
+            echo "<td>" . $linha['Codigo'] . "</td>";
+            echo "<td>" . $linha['QTD_PEDIDOS'] . "</td>";
+            echo "<td>" . $linha['ALTERAR'] . "</td>";
+            echo "</tr>";
+        }
+
+    } else {
+        echo "
+            <tr>
+                <td colspan='4'>
+                    Pedido não encontrado
+                </td>
+            </tr>
+
+        ";
+
+    }
+
+    ?>
+
+</table>
+</body>
+</html>
