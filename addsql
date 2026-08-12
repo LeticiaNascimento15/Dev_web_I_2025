@@ -1,0 +1,25 @@
+-- 19)
+SELECT 
+    p.nome AS produto,
+    c.nome AS cliente,
+    u.sigla AS uf
+FROM produto_vendido pv
+INNER JOIN produto p ON pv.produto_id = p.id
+INNER JOIN venda v ON pv.venda_id = v.id
+INNER JOIN cliente c ON v.cliente_id = c.id
+INNER JOIN bairro b ON c.bairro_id = b.id
+INNER JOIN cidade cid ON b.cidade_id = cid.id
+INNER JOIN uf u ON cid.uf_id = u.id
+WHERE u.sigla = 'RJ';
+
+
+-- 20)
+SELECT 
+    l.id AS numero_lote,
+    l.qtde AS quantidade,
+    p.descricao,
+    f.nome AS fornecedor
+FROM lote l
+INNER JOIN produto p ON l.produto_id = p.id
+INNER JOIN fornecedor f ON p.fornecedor_id = f.id
+WHERE l.qtde > 50;
