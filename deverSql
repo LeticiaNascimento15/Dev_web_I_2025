@@ -1,0 +1,71 @@
+-- 11) Cidades onde existem fornecedores cadastrados
+SELECT DISTINCT c.nome AS cidade
+FROM fornecedor f
+INNER JOIN cidade c ON f.cidade_id = c.id
+ORDER BY c.nome;
+
+-- 12) Produto, fornecedor e tipo com estoque > 100 e preço de custo < 50
+SELECT p.nome AS produto,
+       f.nome AS fornecedor,
+       tp.descricao AS tipo_produto
+FROM produto p
+INNER JOIN fornecedor f ON p.fornecedor_id = f.id
+INNER JOIN tipo_produto tp ON p.tipo_produto_id = tp.id
+WHERE p.estoque > 100
+  AND p.pcusto < 50.00;
+
+-- 13) Fornecedores contendo 'LAB' ou 'FAR'
+SELECT f.nome
+FROM fornecedor f
+WHERE f.nome LIKE '%LAB%'
+   OR f.nome LIKE '%FAR%';
+
+-- 14) Produto, quantidade vendida, cliente e data da venda
+SELECT p.nome AS produto,
+       pv.quantidade,
+       c.nome AS cliente,
+       DATE_FORMAT(v.datavenda, '%d/%m/%Y') AS data_venda
+FROM produto_vendido pv
+INNER JOIN produto p ON pv.produto_id = p.id
+INNER JOIN venda v ON pv.venda_id = v.id
+INNER JOIN cliente c ON v.cliente_id = c.id;
+
+-- 15) 15 produtos de maior preço de custo, ignorando os 5 primeiros
+SELECT p.nome,
+       p.pcusto
+FROM produto p
+ORDER BY p.pcusto DESC
+LIMIT 5, 15;
+
+-- 16) Cliente, UF, vendedor e limite de crédito superior a 5000
+SELECT c.nome AS cliente,
+       u.sigla AS uf,
+       v.nome AS vendedor,
+       c.limite_credito
+FROM cliente c
+INNER JOIN vendedor v ON c.vendedor_id = v.id
+INNER JOIN bairro b ON c.bairro_id = b.id
+INNER JOIN cidade ci ON b.cidade_id = ci.id
+INNER JOIN uf u ON ci.uf_id = u.id
+WHERE c.limite_credito > 5000.00;
+
+-- 17) Produtos fornecidos por empresas de Minas Gerais
+SELECT p.nome AS produto,
+       u.sigla AS uf
+FROM produto p
+INNER JOIN fornecedor f ON p.fornecedor_id = f.id
+INNER JOIN cidade c ON f.cidade_id = c.id
+INNER JOIN uf u ON c.uf_id = u.id
+WHERE u.sigla = 'MG';
+
+-- 18) Clientes atendidos por vendedores com comissão por venda em 2006 superior a 200
+SELECT c.nome AS cliente,
+       ci.nome AS cidade,
+       ROUND(vd.valor_total * ve.comissao_percentual / 100, 2) AS comissao
+FROM venda vd
+INNER JOIN cliente c ON vd.cliente_id = c.id
+INNER JOIN vendedor ve ON c.vendedor_id = ve.id
+INNER JOIN bairro b ON c.bairro_id = b.id
+INNER JOIN cidade ci ON b.cidade_id = ci.id
+WHERE YEAR(vd.datavenda) = 2006
+  AND (vd.valor_total * ve.comissao_percentual / 100) > 200;
