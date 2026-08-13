@@ -1,0 +1,107 @@
+-- 21)
+SELECT 
+    DATE_FORMAT(v.datavenda, '%d/%m/%Y') AS data_venda,
+    c.nome AS cliente,
+    ve.nome AS vendedor,
+    u.sigla AS uf
+FROM venda v
+INNER JOIN cliente c 
+    ON v.cliente_id = c.id
+INNER JOIN vendedor ve 
+    ON c.vendedor_id = ve.id
+INNER JOIN bairro b 
+    ON c.bairro_id = b.id
+INNER JOIN cidade cid 
+    ON b.cidade_id = cid.id
+INNER JOIN uf u 
+    ON cid.uf_id = u.id
+WHERE u.sigla = 'RJ'
+   OR u.sigla = 'MG';
+
+
+-- 22)
+SELECT DISTINCT
+    ve.nome AS vendedor
+FROM venda v
+INNER JOIN cliente c 
+    ON v.cliente_id = c.id
+INNER JOIN vendedor ve 
+    ON c.vendedor_id = ve.id
+INNER JOIN bairro b 
+    ON c.bairro_id = b.id
+INNER JOIN cidade cid 
+    ON b.cidade_id = cid.id
+INNER JOIN uf u 
+    ON cid.uf_id = u.id
+WHERE (u.sigla = 'RJ'
+    OR u.sigla = 'ES'
+    OR u.sigla = 'SP')
+  AND v.valor_total > (
+      SELECT AVG(v2.valor_total)
+      FROM venda v2
+      INNER JOIN cliente c2 
+          ON v2.cliente_id = c2.id
+      INNER JOIN bairro b2 
+          ON c2.bairro_id = b2.id
+      INNER JOIN cidade cid2 
+          ON b2.cidade_id = cid2.id
+      INNER JOIN uf u2 
+          ON cid2.uf_id = u2.id
+      WHERE u2.sigla = u.sigla
+  );
+
+
+-- 23)
+SELECT
+    f.nome AS fornecedor,
+    p.nome AS produto
+FROM fornecedor f
+LEFT JOIN produto p
+    ON p.fornecedor_id = f.id;
+
+
+-- 24)
+SELECT
+    c.nome AS cliente,
+    b.nome AS bairro,
+    cid.nome AS cidade,
+    u.sigla AS uf,
+    v.valor_total AS valor,
+    DATE_FORMAT(v.datavenda, '%d/%m/%Y') AS data_venda
+FROM cliente c
+INNER JOIN bairro b
+    ON c.bairro_id = b.id
+INNER JOIN cidade cid
+    ON b.cidade_id = cid.id
+INNER JOIN uf u
+    ON cid.uf_id = u.id
+LEFT JOIN venda v
+    ON v.cliente_id = c.id
+    AND YEAR(v.datavenda) = 2006
+WHERE u.sigla = 'MG'
+   OR u.sigla = 'RJ'
+   OR u.sigla = 'ES';
+
+
+-- 25)
+SELECT
+    c.nome AS cliente,
+    b.nome AS bairro,
+    cid.nome AS cidade,
+    u.sigla AS uf,
+    v.valor_total AS valor,
+    DATE_FORMAT(v.datavenda, '%d/%m/%Y') AS data_venda
+FROM cliente c
+INNER JOIN bairro b
+    ON c.bairro_id = b.id
+INNER JOIN cidade cid
+    ON b.cidade_id = cid.id
+INNER JOIN uf u
+    ON cid.uf_id = u.id
+LEFT JOIN venda v
+    ON v.cliente_id = c.id
+    AND YEAR(v.datavenda) = 2006
+    AND v.valor_total > 100
+WHERE u.sigla = 'MG'
+   OR u.sigla = 'RJ'
+   OR u.sigla = 'ES';
