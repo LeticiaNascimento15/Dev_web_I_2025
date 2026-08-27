@@ -1,0 +1,70 @@
+comando>arquivo->salva a saido do comando pro arquivo
+comando<arquivo-> a entrada do comando é o conteudo do arquivo
+comando>>arquivo-> anexa a saida do comando em arquivo
+
+exemplo:
+saida:ls~ > arquivo.txt
+
+entrada:
+read NUMERO
+echo"2"> numero.txt
+read NUMERO < numero.txt
+
+anexa: anexa a saida padrao de um comando, de um arquivo ja existente
+cria o arquivo se precisar
+exemplo:
+ls*.txt> arquivos.txt
+ls/etc>>arquivos.txt
+ls~/Dowloads>>arquivos.txt
+
+É possível redirecionar saída-padrão e os 
+erros ao mesmo tempo em arquivos 
+separados:
+firefox 1> saida.txt 2> erros.txt
+
+Para capturar a saída e os erros em um 
+mesmo arquivo, devemos utilizar a 
+seguinte sintaxe:
+libreoffice --writer > saida_e_erros.txt 2>&1
+
+Para ignorar saídas e erros de programa, utiliza-se o dispositivo nulo:
+dev/null
+Apenas redirecione para ele: libreoffice --writer 1 > /dev/null 2>&1
+
+Redirecionamento saída-padrão para comando:
+Utiliza a saída de um programa como parte da execução de outro programa:
+comando1 `comando2`: 
+1) Executa comando2 : 
+2) Substitui saída de comando2 e então executa comando1
+//usado mt em scripts
+exemplos:
+VARIAVEL=`date`
+echo “A data hoje é: `date`”
+
+PIPES:
+São utilizados para redirecionar a saidas de um programa para ser entrada de outro
+programa1|programa2
+Exemplos:
+ps-e|less; apt-cache search codeblocks|grep 'codeblocks'
+Programas que são feitos para se utilizar com pipes:
+1)grep / egrep
+2)find
+3)awk
+   sed
+   head / tail
+   sort
+   uniq
+   cut
+   join / paste
+   wc
+   …
+Pipes podem ser combinados com redirecionamentos para arquivos
+-ps -e | grep 'chrome' > instancias_chrome.txt
+
+Quando queremos redirecionar a saída de um programa, mas ainda quer ver a saída
+Quer redirecionar a saída e salvar arquivos mesmo com permissão de superusuários
+Exemplo:
+ls~ >/home/leticia/meus_arquivos.txt (ok)
+ls ~ > /etc/meus_arquivos.txt (erro)
+ls ~ | sudo tee /etc/meus_arquivos.txt (ok)
+
