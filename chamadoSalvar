@@ -1,0 +1,41 @@
+<?php
+
+require_once 'conexao.php';
+
+try {
+
+    $pdo = getPDO();
+
+    $sql = "
+        INSERT INTO chamados
+        (
+            titulo,
+            setor,
+            prioridade,
+            descricao
+        )
+        VALUES
+        (
+            :titulo,
+            :setor,
+            :prioridade,
+            :descricao
+        )
+    ";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute([
+        ':titulo' => $_POST['titulo'],
+        ':setor' => $_POST['setor'],
+        ':prioridade' => $_POST['prioridade'],
+        ':descricao' => $_POST['descricao']
+    ]);
+
+    header("Location: painel.php");
+
+} catch(PDOException $e) {
+
+    echo $e->getMessage();
+
+}
