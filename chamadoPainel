@@ -1,0 +1,84 @@
+<?php
+
+require_once 'conexao.php';
+
+$pdo = getPDO();
+
+$sql = "
+SELECT
+    id,
+    titulo,
+    setor,
+    prioridade,
+    status_chamado,
+    data_abertura
+FROM chamados
+ORDER BY data_abertura DESC
+";
+
+$stmt = $pdo->query($sql);
+
+$dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Painel de Chamados</title>
+
+<style>
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th, td{
+    border:1px solid #ccc;
+    padding:10px;
+}
+
+th{
+    background:#003366;
+    color:white;
+}
+
+</style>
+
+</head>
+<body>
+
+<h2>Painel de Chamados</h2>
+
+<table>
+
+<tr>
+    <th>ID</th>
+    <th>Título</th>
+    <th>Setor</th>
+    <th>Prioridade</th>
+    <th>Status</th>
+    <th>Data</th>
+</tr>
+
+<?php foreach($dados as $linha): ?>
+
+<tr>
+
+    <td><?= $linha['id'] ?></td>
+    <td><?= htmlspecialchars($linha['titulo']) ?></td>
+    <td><?= htmlspecialchars($linha['setor']) ?></td>
+    <td><?= htmlspecialchars($linha['prioridade']) ?></td>
+    <td><?= htmlspecialchars($linha['status_chamado']) ?></td>
+    <td><?= $linha['data_abertura'] ?></td>
+
+</tr>
+
+<?php endforeach; ?>
+
+</table>
+
+</body>
+</html>
