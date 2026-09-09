@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+    linear-gradient(rgba(5,15,35,.92), rgba(5,15,35,.92)),
+    url('fundo.jpg');
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+}
+
+.container{
+    width:100%;
+    max-width:950px;
+
+    background:rgba(255,255,255,.03);
+
+    backdrop-filter:blur(15px);
+    -webkit-backdrop-filter:blur(15px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:25px;
+
+    padding:40px;
+
+    box-shadow:
+    0 0 50px rgba(0,0,0,.4),
+    inset 0 0 20px rgba(255,255,255,.02);
+}
+
+.titulo{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.titulo h1{
+    color:#fff;
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.titulo span{
+    color:#FFC107;
+}
+
+.titulo p{
+    color:#bfc9d4;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.campo{
+    display:flex;
+    flex-direction:column;
+}
+
+.campo-full{
+    grid-column:1 / -1;
+}
+
+label{
+    color:#fff;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:500;
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:12px;
+
+    color:#fff;
+
+    padding:15px;
+
+    transition:.3s;
+}
+
+input::placeholder,
+textarea::placeholder{
+    color:#8e9db0;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+
+    outline:none;
+
+    border-color:#FFC107;
+
+    box-shadow:
+    0 0 20px rgba(255,193,7,.2);
+
+}
+
+textarea{
+    min-height:150px;
+    resize:none;
+}
+
+button{
+
+    background:#FFC107;
+
+    color:#0A2540;
+
+    border:none;
+
+    padding:16px;
+
+    width:100%;
+
+    border-radius:12px;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 10px 25px rgba(255,193,7,.35);
+
+}
+
+.linha{
+    height:1px;
+    background:rgba(255,255,255,.08);
+    margin:25px 0;
+}
+
+.logo{
+    width:90px;
+    height:90px;
+    border-radius:20px;
+    margin:0 auto 25px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,193,7,.08);
+
+    border:1px solid rgba(255,193,7,.3);
+
+    color:#FFC107;
+
+    font-size:35px;
+}
