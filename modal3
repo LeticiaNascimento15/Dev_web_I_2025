@@ -1,0 +1,133 @@
+<!-- MODAL CLIENTES -->
+<div id="modalCliente" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h3>Seleção de Clientes</h3>
+
+            <span class="fechar" onclick="fecharModal()">
+                &times;
+            </span>
+        </div>
+
+        <div class="modal-body">
+
+            <form action="clientes.php" method="POST">
+
+                <div class="grupo">
+                    <label>Cód. Cliente</label>
+                    <input type="text" name="codigo">
+                </div>
+
+                <div class="grupo">
+                    <label>Nome ou CNPJ</label>
+                    <input type="text" name="busca">
+                </div>
+
+                <button type="submit">
+                    Pesquisar
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function abrirModal(){
+    document.getElementById("modalCliente").style.display = "flex";
+}
+
+function fecharModal(){
+    document.getElementById("modalCliente").style.display = "none";
+}
+
+window.onclick = function(event){
+
+    let modal = document.getElementById("modalCliente");
+
+    if(event.target == modal){
+        fecharModal();
+    }
+
+}
+
+</script>
+
+/* MODAL */
+
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.modal-content{
+    width:800px;
+    background:#fff;
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 0 20px rgba(0,0,0,.3);
+}
+
+.modal-header{
+    background:#0c1f4d;
+    color:white;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.modal-body{
+    padding:20px;
+}
+
+.grupo{
+    margin-bottom:15px;
+}
+
+.grupo label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+.grupo input{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:4px;
+}
+
+.modal-body button{
+    background:#0c1f4d;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+.modal-body button:hover{
+    background:#17367d;
+}
+
+.fechar{
+    cursor:pointer;
+    font-size:28px;
+    font-weight:bold;
+}
+
