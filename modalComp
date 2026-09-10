@@ -1,0 +1,178 @@
+<?php
+require_once 'conexaoR.php';
+try {
+
+    $pdo = getPDO();
+
+    $representante = $_POST['representante'];
+
+    $sql = "
+
+        SELECT
+
+            A3_COD,
+            A3_NOME
+
+        FROM represen
+        WHERE A3_COD = '$representante'
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $dados = $stmt->fetchAll();
+
+} catch(PDOException $erro) {
+    echo $erro->getMessage();
+
+}
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pedidos</title>
+    <link rel="stylesheet" href="tela.css">
+</head>
+<body>
+   <header class="topo">
+    <div class="empresa">
+          <h1>Representante</h1>
+    <table>
+
+        <tr>
+            <th>Cód Representante</th>
+            <th>Nome Representante</th>
+        </tr>
+
+        <?php
+        if(!empty($dados)) {
+            foreach($dados as $linha) {
+
+                echo "<tr>";
+                echo "<td>" . $linha['A3_COD'] . "</td>";
+                echo "<td>" . $linha['A3_NOME'] . "</td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "
+                <tr>
+
+                    <td colspan='4'>
+                        Nenhum representante encontrado.
+                    </td>
+
+                </tr>
+            ";
+        }
+        ?>
+    </table>
+    </div>
+
+    <div class="info">
+        INFORMAÇÕES
+    </div>
+</header>
+
+<nav class="menu-principal">
+    <h1>Consultas:</h1>
+    <ul>
+        <li><a href="#">Orçamentos</a></li>
+        <li><a href="#">Posição Ped.</a></li>
+        <li><a href="#">Clientes</a></li>
+        <li><a href="#">Ped. Enviados</a></li>
+        <li><a href="#">Histórico Comis.</a></li>
+        <li><a href="#">Previsão Comis.</a></li>
+        <li><a href="#">Pedidos</a></li>
+        <li><a href="#">Prospects</a></li>
+    </ul>
+</nav>
+
+<nav class="menu-acoes">
+    Cadastros:
+    <ul>
+        <li><a href="#">Pedidos</a></li>
+        <li><a href="#" onclick="abrirModal();
+        return false;" >Selecionar Cliente</a></li>
+        <li><a href="#">Incluir Produtos</a></li>
+        <li><a href="#">Condições de Pagto</a></li>
+        <li><a href="#">Descontos</a></li>
+        <li><a href="#">Observações</a></li>
+        <li><a href="#">Mostruários</a></li>
+    </ul>
+</nav>
+
+    <div>
+
+    </div>
+
+
+
+
+<main class="conteudo">
+    <div class="box">
+        <h2>Área do Sistema</h2>
+        <p>conteudo</p>
+    </div>
+
+</main> 
+
+//modal Clientes
+<div id="modalCliente" class="modal">
+    <div class="modal-content">
+        
+        <div class="modal-header">
+            <h3>Seleção de Clientes</h3>
+
+            <span class="fechar" onclick="fecharModal()">
+                &times;
+            </span>
+        </div>
+
+        <div class="modal-body">
+
+            <form action="clientes.php" method="POST">
+
+                <div class="grupo">
+                    <label>Cód. Cliente</label>
+                    <input type="text" name="codigo">
+                </div>
+
+                <div class="grupo">
+                    <label>Nome ou CNPJ</label>
+                    <input type="text" name="busca">
+                </div>
+
+                <button type="submit">
+                    Pesquisar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function abrirModal(){
+    document.getElementById("modalCliente").style.display = "flex";
+}
+
+function fecharModal(){
+    document.getElementById("modalCliente").style.display = "none";
+}
+
+window.onclick = function(event){
+    let modal = document.getElementById("modalCliente");
+
+    if(event.target == modal){
+        fecharModal();
+    }
+
+}
+
+</script>
+
+
+</body>
+</html>
