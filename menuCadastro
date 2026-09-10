@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Pedidos</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background:#f4f4f4;
+}
+
+/* TOPO */
+.topo{
+    background:#0d1b3d;
+    color:white;
+    padding:15px 25px;
+    border-bottom:4px solid #f4c400;
+}
+
+.topo h2{
+    font-size:22px;
+}
+
+/* MENU DE AÇÕES */
+.menu-acoes{
+    background:#f4c400;
+    padding:10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    border-bottom:3px solid #0d1b3d;
+}
+
+.menu-acoes button{
+    background:#0d1b3d;
+    color:white;
+    border:none;
+    padding:10px 16px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.menu-acoes button:hover{
+    background:#162b5f;
+}
+
+/* REGRAS */
+.regras{
+    background:#fff8d6;
+    padding:15px;
+    border-left:5px solid #f4c400;
+    margin:15px;
+    border-radius:5px;
+}
+
+.regras h3{
+    color:#0d1b3d;
+    margin-bottom:10px;
+}
+
+/* DADOS CLIENTE */
+.card{
+    background:white;
+    margin:15px;
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+
+.card-header{
+    background:#0d1b3d;
+    color:white;
+    padding:12px;
+    font-weight:bold;
+}
+
+.card-body{
+    padding:15px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:10px;
+}
+
+/* TABELA */
+.tabela{
+    margin:15px;
+    background:white;
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#0d1b3d;
+    color:white;
+}
+
+th,td{
+    padding:12px;
+    text-align:left;
+    border-bottom:1px solid #ddd;
+}
+
+tfoot{
+    background:#f4c400;
+    font-weight:bold;
+}
+
+.total{
+    text-align:right;
+    padding:15px;
+    font-size:18px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="topo">
+    <h2>Pedido de Venda</h2>
+</div>
+
+<div class="menu-acoes">
+    <button>Cliente</button>
+    <button>Incluir Produtos</button>
+    <button>Condições Pagto</button>
+    <button>Descontos</button>
+    <button>Observações</button>
+    <button>Pendências</button>
+    <button>Histórico</button>
+    <button>Campanhas</button>
+    <button>Fechar Pedido</button>
+</div>
+
+<div class="regras">
+    <h3>Regras Comerciais</h3>
+    <p>Pedido mínimo: R$ 1.621,00</p>
+    <p>Parcela mínima: R$ 729,45</p>
+    <p>Prazo máximo: 90 dias</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Dados do Cliente
+    </div>
+
+    <div class="card-body">
+        <div><strong>Código:</strong> 000001</div>
+        <div><strong>Cliente:</strong> FACINI MADEIRAS</div>
+        <div><strong>CNPJ:</strong> 00.000.000/0001-00</div>
+        <div><strong>Cidade:</strong> Duque de Caxias</div>
+        <div><strong>UF:</strong> RJ</div>
+        <div><strong>Tipo:</strong> Solidário</div>
+    </div>
+</div>
+
+<div class="tabela">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Produto</th>
+                <th>Valor</th>
+                <th>Qtd.</th>
+                <th>Desconto</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>000104</td>
+                <td>CILINDRO MONOBLOCO YALE 55MM</td>
+                <td>R$ 28,55</td>
+                <td>1</td>
+                <td>0%</td>
+                <td>R$ 28,55</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="total">
+        Total do Pedido: R$ 28,55
+    </div>
+
+</div>
+
+</body>
+</html>
