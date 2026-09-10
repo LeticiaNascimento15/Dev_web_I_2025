@@ -1,0 +1,58 @@
+<button onclick="abrirModal()">Selecionar Cliente</button>
+
+<div id="modalCliente" class="modal">
+    <div class="modal-content">
+        <span class="fechar" onclick="fecharModal()">&times;</span>
+
+        <h2>Seleção de Clientes</h2>
+
+        <input type="text" placeholder="Código do Cliente">
+        <input type="text" placeholder="Nome ou CNPJ">
+
+        <button>Pesquisar</button>
+    </div>
+</div>
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-content{
+    width:700px;
+    background:white;
+    padding:20px;
+    border-radius:8px;
+    box-shadow:0 5px 20px rgba(0,0,0,.3);
+}
+
+.fechar{
+    float:right;
+    cursor:pointer;
+    font-size:25px;
+}
+
+function abrirModal(){
+    document.getElementById('modalCliente').style.display = 'flex';
+}
+
+function fecharModal(){
+    document.getElementById('modalCliente').style.display = 'none';
+}
+
+window.open
+
+<button onclick="abrirCliente()">Selecionar Cliente</button>
+function abrirCliente() {
+
+    window.open(
+        'clientes.php',
+        'cliente',
+        'width=800,height=600,left=200,top=100'
+    );
+
+}
