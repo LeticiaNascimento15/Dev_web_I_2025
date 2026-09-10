@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema Comercial</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topo">
+    <div class="empresa">
+        ARDUINI REPRESENTAÇÕES LTDA
+    </div>
+
+    <div class="info">
+        INFORMAÇÕES
+    </div>
+</header>
+
+<nav class="menu-principal">
+    <ul>
+        <li><a href="#">Orçamentos</a></li>
+        <li><a href="#">Posição Ped.</a></li>
+        <li><a href="#">Clientes</a></li>
+        <li><a href="#">Ped. Enviados</a></li>
+        <li><a href="#">Histórico Comis.</a></li>
+        <li><a href="#">Previsão Comis.</a></li>
+        <li><a href="#">Pedidos</a></li>
+        <li><a href="#">Prospects</a></li>
+    </ul>
+</nav>
+
+<nav class="menu-acoes">
+    <ul>
+        <li><a href="#">Selecionar Cliente</a></li>
+        <li><a href="#">Incluir Produtos</a></li>
+        <li><a href="#">Condições de Pagto</a></li>
+        <li><a href="#">Descontos</a></li>
+        <li><a href="#">Observações</a></li>
+        <li><a href="#">Pendências</a></li>
+        <li><a href="#">Amostras</a></li>
+    </ul>
+</nav>
+
+<main class="conteudo">
+
+    <div class="box">
+        <h2>Área do Sistema</h2>
+        <p>Seu conteúdo será carregado aqui.</p>
+    </div>
+
+</main>
+
+</body>
+</html>
+
+css
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f2f4f7;
+}
+
+/* TOPO */
+
+.topo{
+    background:#0c1f4d;
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 20px;
+    border-bottom:4px solid #ffc107;
+}
+
+.empresa{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.info{
+    font-size:15px;
+}
+
+/* MENU PRINCIPAL */
+
+.menu-principal{
+    background:#10285f;
+}
+
+.menu-principal ul{
+    display:flex;
+    flex-wrap:wrap;
+    list-style:none;
+}
+
+.menu-principal a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:12px 18px;
+    border-right:1px solid rgba(255,255,255,.1);
+    transition:.3s;
+}
+
+.menu-principal a:hover{
+    background:#18367d;
+}
+
+/* SUBMENU */
+
+.menu-acoes{
+    background:#ffc107;
+    border-bottom:3px solid #0c1f4d;
+}
+
+.menu-acoes ul{
+    display:flex;
+    flex-wrap:wrap;
+    list-style:none;
+}
+
+.menu-acoes a{
+    display:block;
+    text-decoration:none;
+    color:#0c1f4d;
+    font-weight:bold;
+    padding:10px 16px;
+    transition:.3s;
+}
+
+.menu-acoes a:hover{
+    background:#ffcf33;
+}
+
+/* CONTEÚDO */
+
+.conteudo{
+    padding:20px;
+}
+
+.box{
+    background:white;
+    border-radius:8px;
+    padding:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.box h2{
+    margin-bottom:10px;
+    color:#0c1f4d;
+}
