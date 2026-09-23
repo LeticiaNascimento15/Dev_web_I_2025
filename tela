@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pedidos</title>
+    <link rel="stylesheet" href="tela.css">
+</head>
+<body>
+   <header class="topo">
+    <div class="empresa">
+          <h1>Representante</h1>
+    <table>
+
+        <tr>
+            <th>Cód Representante</th>
+            <th>Nome Representante</th>
+        </tr>
+
+        <?php
+        if(!empty($dados)) {
+            foreach($dados as $linha) {
+
+                echo "<tr>";
+                echo "<td>" . $linha['A3_COD'] . "</td>";
+                echo "<td>" . $linha['A3_NOME'] . "</td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "
+                <tr>
+
+                    <td colspan='4'>
+                        Nenhum representante encontrado.
+                    </td>
+
+                </tr>
+            ";
+        }
+        ?>
+    </table>
+    </div>
+
+    <div class="info">
+        INFORMAÇÕES
+    </div>
+</header>
+
+<nav class="menu-principal">
+    <h1>Consultas:</h1>
+    <ul>
+        <li><a href="#">Orçamentos</a></li>
+        <li><a href="#">Posição Ped.</a></li>
+        <li><a href="#">Clientes</a></li>
+        <li><a href="#">Ped. Enviados</a></li>
+        <li><a href="#">Histórico Comis.</a></li>
+        <li><a href="#">Previsão Comis.</a></li>
+        <li><a href="#">Pedidos</a></li>
+        <li><a href="#">Prospects</a></li>
+    </ul>
+</nav>
+
+<nav class="menu-acoes">
+    Cadastros:
+    <ul>
+        <li><a href="#">Pedidos</a></li>
+        <li><a href="#"> Selecionar Clientes</a></li>
+        <li><a href="#">Incluir Produtos</a></li>
+        <li><a href="#">Condições de Pagto</a></li>
+        <li><a href="#">Descontos</a></li>
+        <li><a href="#">Observações</a></li>
+        <li><a href="#">Mostruários</a></li>
+    </ul>
+</nav>
+
+    <div>
+
+    </div>
+
+
+
+
+<main class="conteudo">
+    <div class="box">
+        <h2>Área do Sistema</h2>
+        <p>conteudo</p>
+    </div>
+
+</main> 
+
+
+</script>
+
+
+</body>
+</html>
