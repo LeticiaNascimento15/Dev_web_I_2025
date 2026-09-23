@@ -1,0 +1,44 @@
+<?php
+
+$conexao = mysqli_connect(
+    "localhost",
+    "usuario",
+    "senha",
+    "banco"
+);
+
+$sql = "SELECT codigo, nome, cnpj FROM clientes ORDER BY nome";
+
+$resultado = mysqli_query($conexao, $sql);
+
+?>
+
+<table border="1">
+    <tr>
+        <th>Código</th>
+        <th>Nome</th>
+        <th>CNPJ</th>
+        <th></th>
+    </tr>
+
+<?php while($cliente = mysqli_fetch_assoc($resultado)) { ?>
+
+<tr>
+    <td><?= $cliente['codigo'] ?></td>
+    <td><?= $cliente['nome'] ?></td>
+    <td><?= $cliente['cnpj'] ?></td>
+
+    <td>
+        <button onclick="selecionarCliente(
+            '<?= $cliente['codigo'] ?>',
+            '<?= htmlspecialchars($cliente['nome'], ENT_QUOTES) ?>',
+            '<?= $cliente['cnpj'] ?>'
+        )">
+            Selecionar
+        </button>
+    </td>
+</tr>
+
+<?php } ?>
+
+</table>
