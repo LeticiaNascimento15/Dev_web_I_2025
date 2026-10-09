@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido</title>
+    <link rel="stylesheet" href="pedidos.css">
+
+    <script>
+        function SelecionarClientes() {
+            window.open(
+                'clientes.php',
+                'clientes',
+                'width=800,height=500,scrollbars=yes'
+            );
+        }
+    </script>
+</head>
+
+<body>
+
+    <h2>Pedido</h2>
+
+    <!-- Seleção de clientes cadastrados -->
+    <div class="fonte_vermelha centralizado">
+        <strong>SELEÇÃO DE CLIENTES CADASTRADOS</strong>
+    </div>
+
+    <br>
+
+    <table class="tabela">
+        <tr>
+            <td>Cód. do Cliente:</td>
+            <td class="alinhado_direita">
+                Parte do nome ou o CNPJ do Cliente:
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <form action=".php" method="get" autocomplete="off">
+                    <input
+                        type="text"
+                        name="A1_COD"
+                        class="campo2"
+                        maxlength="6"
+                    >
+
+                    <br><br>
+
+                    <input
+                        type="submit"
+                        name="Enviar"
+                        value="Selecionar"
+                        class="botoes"
+                    >
+                </form>
+            </td>
+
+            <td class="alinhado_direita">
+                <form
+                    action="seleciona.php?item=cliente"
+                    method="post"
+                    autocomplete="off"
+                >
+                    <input type="hidden" name="acao" value="pesq">
+
+                    <input
+                        type="text"
+                        name="valor"
+                        class="campo2"
+                    >
+
+                    <br><br>
+
+                    <input
+                        type="submit"
+                        name="Enviar"
+                        value="Pesquisar"
+                        class="botoes"
+                    >
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <hr class="separador">
+
+    <!-- Orçamento para cliente sem cadastro -->
+    <div class="fonte_vermelha centralizado">
+        <strong>ORÇAMENTO PARA CLIENTE SEM CADASTRO</strong>
+    </div>
+
+    <br>
+
+    <form
+        action="grava_cli.php"
+        method="get"
+        autocomplete="off"
+        onsubmit="return valida()"
+    >
+        <input type="hidden" name="A1_COD" value="000000">
+
+        <table class="tabela">
+
+            <tr>
+                <td class="fonte_vermelha alinhado_direita">
+                    <strong>Tipo:</strong>
+                </td>
+
+                <td colspan="4">
+                    <select name="TIPO" tabindex="6">
+                        <option value="R" selected>
+                            Revendedor - Comércio em geral SEM Substituição Tributária
+                        </option>
+
+                        <option value="F">
+                            Consumidor Final - Indústrias em geral ou Construtoras
+                        </option>
+
+                        <option value="S">
+                            Solidário - Comércio em geral COM Substituição Tributária
+                        </option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="fonte_vermelha alinhado_direita">
+                    <strong>Nome:</strong>
+                </td>
+
+                <td colspan="4">
+                    <input
+                        type="text"
+                        name="NOME"
+                        maxlength="40"
+                        size="50"
+                    >
+                </td>
+            </tr>
+
+            <tr>
+                <td class="alinhado_direita">
+                    <strong>Email:</strong>
+                </td>
+
+                <td colspan="4">
+                    <input
+                        type="email"
+                        name="EMAIL"
+                        maxlength="60"
+                        size="30"
+                    >
+                </td>
+            </tr>
+
+            <tr>
+                <td class="alinhado_direita">
+                    <strong>Tel:</strong>
+                </td>
+
+                <td>
+                    <input
+                        type="text"
+                        name="TELEFONE"
+                        maxlength="15"
+                        size="20"
+                    >
+                </td>
+
+                <td class="alinhado_direita">
+                    <strong>CNPJ:</strong>
+                </td>
+
+                <td colspan="2">
+                    <input
+                        type="text"
+                        name="CNPJ"
+                        size="20"
+                        maxlength="18"
+                    >
+                </td>
+            </tr>
+
+            <tr>
+                <td class="alinhado_direita">
+                    <strong>Suframa:</strong>
+                </td>
+
+                <td>
+                    <select name="SUFRAMA" tabindex="8" id="suframa">
+                        <option value="S">Sim</option>
+                        <option value="N" selected>Não</option>
+                    </select>
+                </td>
+
+                <td class="fonte_vermelha alinhado_direita">
+                    <strong>UF:</strong>
+                </td>
+
+                <td>
+                    <select name="UF" tabindex="9" id="uf">
+                        <option value="AC">AC</option>
+                        <option value="AL">AL</option>
+                        <option value="AM">AM</option>
+                        <option value="AP">AP</option>
+                        <option value="BA">BA</option>
+                        <option value="CE">CE</option>
+                        <option value="DF">DF</option>
+                        <option value="ES">ES</option>
+                        <option value="GO">GO</option>
+                        <option value="MA">MA</option>
+                        <option value="MG">MG</option>
+                        <option value="MS">MS</option>
+                        <option value="MT">MT</option>
+                        <option value="PA">PA</option>
+                        <option value="PB">PB</option>
+                        <option value="PE">PE</option>
+                        <option value="PI">PI</option>
+                        <option value="PR">PR</option>
+                        <option value="RJ" selected>RJ</option>
+                        <option value="RN">RN</option>
+                        <option value="RO">RO</option>
+                        <option value="RR">RR</option>
+                        <option value="RS">RS</option>
+                        <option value="SC">SC</option>
+                        <option value="SE">SE</option>
+                        <option value="SP">SP</option>
+                        <option value="TO">TO</option>
+                        <option value="EX">EX</option>
+                    </select>
+                </td>
+
+                <td>
+                    <input
+                        type="submit"
+                        name="Enviar"
+                        class="botoes"
+                        value="Confirmar"
+                    >
+                </td>
+            </tr>
+
+        </table>
+    </form>
+
+    <hr class="separador">
+
+</body>
+</html>
+
+css
+/* Configurações gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* Texto vermelho */
+.fonte_vermelha {
+    color: red;
+}
+
+.centralizado {
+    text-align: center;
+}
+
+/* Tabelas */
+.tabela {
+    width: 100%;
+    border: none;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+.tabela td {
+    padding: 8px;
+    vertical-align: top;
+}
+
+.alinhado_direita {
+    text-align: right;
+}
+
+/* Campos de texto */
+input[type="text"],
+input[type="email"],
+select {
+    max-width: 100%;
+    padding: 6px;
+    border: 1px solid #999999;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.campo2 {
+    width: 220px;
+    max-width: 100%;
+}
+
+/* Botões */
+.botoes {
+    padding: 7px 16px;
+    background-color: #d9d9d9;
+    border: 1px solid #999999;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.botoes:hover {
+    background-color: #c0c0c0;
+}
+
+/* Linhas separadoras */
+.separador {
+    width: 450px;
+    max-width: 100%;
+    margin: 20px auto;
+    border: none;
+    border-top: 1px solid #999999;
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 700px) {
+    body {
+        padding: 10px;
+    }
+
+    .tabela {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .tabela td {
+        padding: 6px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select {
+        width: 100%;
+    }
+
+    .botoes {
+        max-width: 100%;
+    }
+}
