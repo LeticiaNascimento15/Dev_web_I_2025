@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Pedido</title>
+    <link rel="stylesheet" href="pedidos.css">
+    <script>
+        function SelecionarClientes() {
+            window.open(
+                'clientes.php',
+                'clientes',
+                'width=800,height=500,scrollbars=yes'
+            );
+        }
+    </script>
+</head>
+<body>
+
+<h2>Pedido</h2>
+
+<form method="post">
+
+    
+
+    <button type="button" onclick="SelecionarClientes()">
+        Selecionar Cliente
+    </button>
+
+</form>
+
+</body>
+</html>
