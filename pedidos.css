@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=</script>
+    <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Pedido</title>
+    <link rel="stylesheet" href="pedidos.css">
+    <script>
+        function SelecionarClientes() {
+            window.open(
+                'clientes.php',
+                'clientes',
+                'width=800,height=500,scrollbars=yes'
+            );
+        }
+    </script>
+</head>
+<body>
+
+<h2>Pedido</h2>
+<form method="post">
+
+<div align="center" class='fonte_vermelha'><strong>SELEÇÃO DE CLIENTES CADASTRADOS</strong></div><br>
+<table width="100%" border="0" cellpadding="0">
+<tr>
+  <td valign="top">Cód. do Cliente:</td>
+  <td valign="top" align="right">Parte do nome ou o CNPJ do Cliente:</td>//ver sobre isso ainda
+</tr>
+<tr>  
+  <td valign="top">
+<form action=".php" method="get" name="form" autocomplete='off'>
+<input type="text" name="A1_COD" class="campo2" maxlength="6"><br><br>
+<input type="submit" name="Enviar" value="Selecionar" class="botoes">
+</form>
+  </td>
+  <td valign="top" align="right">
+<form action="seleciona.php?item=cliente" method="POST" name="form1" autocomplete='off'>
+<input type="hidden" name="acao" value="pesq">
+<input type="text" name="valor" class="campo2"><br><br>
+<input type="submit" name="Enviar" value="Pesquisar" class="botoes">
+</form>
+  </td>
+</tr>
+</table>
+
+<hr size="1" noshade width="450">
+
+<div align="center" class='fonte_vermelha'><b>ORÇAMENTO PARA CLIENTE SEM CADASTRO</b></div><br>
+<table width="100%" border="0" cellpadding="0">
+<form action="grava_cli.php" method="get" name="form2" autocomplete='off' onSubmit="return valida()">
+  <input type="hidden" name="A1_COD" value = '000000'>
+
+<tr>
+  <td width="15%" class='fonte_vermelha' align="right"><strong>Tipo:</strong></td>
+  <td width='85%' colspan="4">
+    <select name='TIPO'  tabindex='6'>
+<option value='R' selected> Revendedor - Comércio em geral SEM Substituição Tributária </option>
+<option value='F' > Consumidor Final - Indústrias em geral ou Construtoras </option>
+<option value='S' > Solidário - Comércio em geral COM Substituição Tributária </option>
+</select>
+</tr>
+<tr>
+  <td width="15%" class='fonte_vermelha' align="right"><strong>Nome:</strong></td>
+  <td width="85%" colspan="4"><input type="text" name="NOME" maxlength="40" size="50" value=''></td>
+</tr>
+<tr>
+  <td width="15%" align="right"><strong>Email:</strong></td>
+  <td width="85%" colspan="4"><input type="text" name="EMAIL" maxlength="60" size="14" value=''></td>
+</tr>
+<tr>
+  <td width="15%" align="right"><strong>Tel:</strong></td>
+  <td width="30%"><input type="text" name="TELEFONE" maxlength="15" size="20" onKeydown="return txtBoxFormat(this.form, this.name, '(99) 9999-99999', event);" value=''></td>
+  <td width="15%" align="right"><strong>CNPJ:</strong></td>
+  <td width="27%" colspan="2"><input type='text' name='CNPJ' size='14' maxlength='18' onKeydown="return txtBoxFormat(this.form, this.name, '99.999.999/9999-99', event);" value=''></td>
+</tr>
+<tr>
+  <td width="15%" align="right"><strong>Suframa:</strong></td>
+  <td width="30%">
+  <select name='SUFRAMA'  tabindex='8' id='suframa' >
+<option value='S' > Sim </option>
+<option value='N' selected> Não </option>
+</select>
+  </td>
+  <td width="5%" class='fonte_vermelha' align="right"><strong>UF:</strong></td>
+  <td width="21%">
+  <select name='UF'  tabindex='8' id='uf' >
+<option value='AC' > AC </option>
+<option value='AL' > AL </option>
+<option value='AM' > AM </option>
+<option value='AP' > AP </option>
+<option value='BA' > BA </option>
+<option value='CE' > CE </option>
+<option value='DF' > DF </option>
+<option value='ES' > ES </option>
+<option value='GO' > GO </option>
+<option value='MA' > MA </option>
+<option value='MG' > MG </option>
+<option value='MS' > MS </option>
+<option value='MT' > MT </option>
+<option value='PA' > PA </option>
+<option value='PB' > PB </option>
+<option value='PE' > PE </option>
+<option value='PI' > PI </option>
+<option value='PR' > PR </option>
+<option value='RJ' selected> RJ </option>
+<option value='RN' > RN </option>
+<option value='RO' > RO </option>
+<option value='RR' > RR </option>
+<option value='RS' > RS </option>
+<option value='SC' > SC </option>
+<option value='SE' > SE </option>
+<option value='SP' > SP </option>
+<option value='TO' > TO </option>
+<option value='EX' > EX </option>
+</select>
+  </td>
+  <td width="29%"><input type="submit" name="Enviar" class="botoes" value="Confirmar"></td>
+</tr>
+</form>
+</table>
+
+<hr size="1" noshade width="450">
+<br>
+
+<br>
+</head>
+</form>
+</body>
+</html>
