@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Clientes</title>
+
+<?php
+require_once'pedidos.php'
+?>
+
+<script>
+function selecionarCliente(codigo,nome)// vai pegar as informacoes de pedidos e colocar com o codigo do banco
+{
+    window.opener.document.getElementById('codigo_cliente').value = A1_COD;
+
+    window.opener.document.getElementById('nome_cliente').value = A1_NOME;
+
+    window.opener.document.getElementById('end_cliente').value = A1_END;
+
+    window.opener.document.getElementById('est_cliente').value = A1_EST;
+
+    window.opener.document.getElementById('email_cliente').value = A1_EMAIL;
+
+    window.opener.document.getElementById('tel_cliente').value = A1_TEL;
+
+    window.opener.document.getElementById('ddd_cliente').value = A1_DDD;
+    window.close();
+}
+
+</script>
+
+<style>
+table{
+    border-collapse:collapse;
+    width:100%;
+}
+
+th,td{
+    border:1px solid #ccc;
+    padding:8px;
+}
+</style>
+
+
+<?php
+$conexaoP = mysqli_connect(
+    "cloud.uniaomundial.com.br",
+    "uniaoteste",
+    "MunD08dial16unI2019",
+    "uniaoteste"
+);
+
+$sql = "SELECT A1_COD, A1_NOME, A1_END, A1_EST, A1_EMAIL, A1_TEL, A1_DDD
+FROM clientes WHERE A1_NOME = :nome LIMIT 1";
+
+$resultado = mysqli_query($conexaoP, $sql);
+?>
+
+/* talvez eu tire td isso de baixo */
+<table border="1">
+    <tr>
+        <th>Código</th>
+        <th>Nome</th>
+        <th>Endereço</th>
+        <th>Estado</th>
+        <th>Email</th>
+        <th>Telefone</th>
+        <th>DDD</th>
+    </tr>
+
+<?php while($cliente = mysqli_fetch_assoc($resultado)) { ?>
+
+<tr>
+    <td><?= $cliente['A1_COD'] ?></td>
+    <td><?= $cliente['A1_NOME'] ?></td>
+    <td><?= $cliente['A1_END'] ?></td>
+    <td><?= $cliente['A1_EST'] ?></td>
+    <td><?= $cliente['A1_EMAIL'] ?></td>
+    <td><?= $cliente['A1_TEL'] ?></td>
+    <td><?= $cliente['A1_DDD'] ?></td>
+
+    <td>
+        <button onclick="selecionarCliente(
+            '<?= $cliente['A1_COD'] ?>',
+            '<?= htmlspecialchars($cliente['A1_NOME'], ENT_QUOTES) ?>',
+            '<?= $cliente['A1_END'] ?>',
+            '<?= $cliente['A1_EST'] ?>,
+            '<?= $cliente['A1_EMAIL'] ?>,
+            '<?= $cliente['A1_TEL'] ?>,
+            '<?= $cliente['A1_DDD'] ?>,
+        )">
+            Selecionar
+        </button>
+    </td>
+</tr>
+
+<?php } ?>
+
+</table>
