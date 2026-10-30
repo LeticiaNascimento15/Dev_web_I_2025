@@ -1,0 +1,27 @@
+function selecionarCliente(cliente) {
+    const janelaPedidos = window.opener;
+
+    if (!janelaPedidos || janelaPedidos.closed) {
+        alert('Janela de pedidos não encontrada.');
+        return;
+    }
+
+    const telaPrincipal = janelaPedidos.opener;
+
+    if (!telaPrincipal || telaPrincipal.closed) {
+        alert('Tela principal não encontrada.');
+        return;
+    }
+
+    // Chama diretamente a função do tela.php
+    if (typeof telaPrincipal.receberCliente !== 'function') {
+        alert('A função receberCliente não foi encontrada no tela.php.');
+        return;
+    }
+
+    telaPrincipal.receberCliente(cliente);
+
+    // Fecha as duas janelas auxiliares
+    window.close();
+    janelaPedidos.close();
+}
